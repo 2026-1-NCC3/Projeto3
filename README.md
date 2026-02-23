@@ -7,7 +7,7 @@
 
 <h1 align="center">Alinha+</h1>
 
-## Integrantes: <a href="https://github.com/GuilhermeMonteiro14">Guilherme Monteiro Da Silva</a>, <a href="https://github.com/DebatingAlpaca">João Pedro Da Silva</a>, <a href="https://github.com/Santos-raphael">Bruno Rodrigues Da Costa</a>, <a href="https://github.com/StefanyO8">Stefany Samira De Oliveira Cubertino</a>
+## Integrantes: <a href="https://github.com/GuilhermeMonteiro14">Guilherme Monteiro Da Silva</a>, <a href="https://github.com/DebatingAlpaca">João Pedro Da Silva</a>, <a href="https://github.com/rodriguesbrun">Bruno Rodrigues Da Costa</a>, <a href="https://github.com/StefanyO8">Stefany Samira De Oliveira Cubertino</a>
 
 ## Professores Orientadores: <a href="https://www.linkedin.com/in/cristina-machado-corr%C3%AAa-leite-630309160" target="_blank"> Cristina Machado Corrêa Leite</a>, <a href="https://www.linkedin.com/in/dolemes/" target="_blank"> David de Oliveira Lemes</a>, <a href="https://www.linkedin.com/in/francisco-escobar/" target="_blank"> Francisco de Souza Escobar </a>, <a href="https://www.linkedin.com/in/katia-bossi/" target="_blank"> Kátia Bossi </a>, <a href="https://www.linkedin.com/in/leonardo-fabris-lugoboni-a3369416/?originalSubdomain=br" target="_blank"> Leonardo Fabris Lugoboni</a><br/>
 
