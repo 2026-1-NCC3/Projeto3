@@ -14,10 +14,10 @@
 ## Descrição
 
 <p align="center">
-  <img src="imagens/logo.png" 
+  <img src="Logo ref.png" 
        alt="Alinha+" 
        border="5" 
-       width="400">
+       width="300">
 </p>
 
 
