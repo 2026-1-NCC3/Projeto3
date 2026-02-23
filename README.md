@@ -9,7 +9,7 @@
 
 ## Integrantes: <a href="https://github.com/GuilhermeMonteiro14">Guilherme Monteiro Da Silva</a>, <a href="https://github.com/DebatingAlpaca">João Pedro Da Silva</a>, <a href="https://github.com/rodriguesbrun">Bruno Rodrigues Da Costa</a>, <a href="https://github.com/StefanyO8">Stefany Samira De Oliveira Cubertino</a>
 
-## Professores Orientadores: <a href="https://www.linkedin.com/in/cristina-machado-corr%C3%AAa-leite-630309160" target="_blank"> Cristina Machado Corrêa Leite</a>, <a href="https://www.linkedin.com/in/dolemes/" target="_blank"> David de Oliveira Lemes</a>, <a href="https://www.linkedin.com/in/francisco-escobar/" target="_blank"> Francisco de Souza Escobar </a>, <a href="https://www.linkedin.com/in/katia-bossi/" target="_blank"> Kátia Bossi </a>, <a href="https://www.linkedin.com/in/leonardo-fabris-lugoboni-a3369416/?originalSubdomain=br" target="_blank"> Leonardo Fabris Lugoboni</a><br/>
+## Professores Orientadores: <a href="https://www.linkedin.com/in/katia-bossi/" target="_blank"> Kátia Bossi</a>, <a href="https://br.linkedin.com/in/marco-aurelio-lima-barbosa" target="_blank"> Marco Aurélio Lima Barbosa</a>, <a href="https://br.linkedin.com/in/rodrigo-da-rosa-phd" target="_blank"> Rodrigo da Rosa</a>, <a href="https://br.linkedin.com/in/victorbarq" target="_blank"> Victor Bruno Alexander Rosetti de Quiroz</a><br/>
 
 ## Descrição
 
