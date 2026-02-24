@@ -14,7 +14,7 @@
 ## Descrição
 
 <p align="center">
-  <img src="Logo ref.png" 
+  <img src="/Imagens/Logo ref.png" 
        alt="Alinha+" 
        border="5" 
        width="300">
