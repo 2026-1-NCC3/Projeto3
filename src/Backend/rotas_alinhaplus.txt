@@ -1,0 +1,545 @@
+================================================================
+        ROTAS API - ALINHA PLUS | MAYA FISIOTERAPIA RPG
+================================================================
+
+BASE URL: http://localhost:3000
+
+⚠️  ROTAS PROTEGIDAS: Adicionar no Header de todas (exceto /auth):
+    Authorization: Bearer SEU_TOKEN_AQUI
+
+----------------------------------------------------------------
+  COMO OBTER O TOKEN:
+  1. Faça POST /auth/login com email e senha
+  2. Copie o campo "token" da resposta
+  3. No Postman: Authorization → Bearer Token → cole o token
+----------------------------------------------------------------
+
+================================================================
+  QUANDO USAR CADA ROTA DE CADASTRO
+================================================================
+
+  Novo paciente pelo APP MOBILE (se cadastra sozinho):
+  → POST /auth/registro
+     Cria usuário + perfil de paciente de uma vez
+     Senha é criptografada automaticamente com bcrypt
+     NÃO precisa de token
+
+  Novo paciente pelo PAINEL WEB (admin cadastra):
+  → POST /pacientes
+     Cria usuário + perfil de paciente de uma vez
+     Senha é criptografada automaticamente com bcrypt
+     Precisa de token de ADMIN
+
+  Novo admin/profissional (apenas admin cria):
+  → POST /usuarios
+     Cria SOMENTE o usuário base (sem perfil de paciente)
+     Senha é criptografada automaticamente com bcrypt
+     Precisa de token de ADMIN
+     Depois de criar, vincular manualmente na tabela Usuario_ADM
+
+================================================================
+  AUTH (PÚBLICA — sem token)
+================================================================
+
+POST /auth/registro
+→ Paciente se cadastra pelo app mobile
+→ Cria registro em Usuario + Usuario_Paciente
+→ Senha já sai criptografada com bcrypt
+{
+  "nome": "Ana Lima",
+  "email": "ana@email.com",
+  "senha": "123456",
+  "telefone": "11999999999",
+  "data_nascimento": "1998-07-20",
+  "observacoes": "Dor no joelho"
+}
+
+------------------------------------------------------------
+
+POST /auth/login
+→ Login de qualquer usuário (admin ou paciente)
+→ Retorna o token JWT e o perfil do usuário
+→ Use o token retornado em todas as rotas protegidas
+{
+  "email": "admin@exemplo.com",
+  "senha": "123456"
+}
+
+------------------------------------------------------------
+
+GET /auth/me
+→ Retorna os dados do usuário que está logado no momento
+→ Útil para o app mobile exibir o perfil do usuário
+→ Identificado automaticamente pelo token
+(sem body — apenas token no header)
+
+================================================================
+  USUARIOS (apenas admin)
+================================================================
+
+GET /usuarios
+→ Lista todos os usuários cadastrados no sistema
+→ Retorna apenas dados básicos (sem a senha)
+→ Inclui admins e pacientes
+(sem body)
+
+------------------------------------------------------------
+
+GET /usuarios/:id
+→ Busca um usuário específico pelo ID
+→ Útil para verificar dados de um usuário em particular
+Exemplo: GET /usuarios/1
+(sem body)
+
+------------------------------------------------------------
+
+POST /usuarios
+→ Cria um novo usuário BASE (sem perfil de paciente)
+→ Usado para criar admins e profissionais
+→ Senha já sai criptografada com bcrypt
+→ Após criar, vincular na tabela Usuario_ADM manualmente
+{
+  "nome": "Carlos Silva",
+  "email": "carlos@email.com",
+  "senha": "123456"
+}
+
+------------------------------------------------------------
+
+PUT /usuarios/:id
+→ Atualiza nome, email e/ou senha de um usuário
+→ Se não enviar a senha, ela é mantida como está
+→ Se enviar nova senha, ela é criptografada automaticamente
+Exemplo: PUT /usuarios/1
+{
+  "nome": "Carlos Silva Atualizado",
+  "email": "carlos@email.com",
+  "senha": "novaSenha123"
+}
+
+OBS: O campo "senha" é opcional no PUT.
+     Se omitido, a senha atual é preservada.
+
+------------------------------------------------------------
+
+DELETE /usuarios/:id
+→ Remove o usuário do sistema
+→ Atenção: não remove registros vinculados
+→ Use DELETE /pacientes para remover pacientes com cascata
+Exemplo: DELETE /usuarios/1
+(sem body)
+
+================================================================
+  PACIENTES (apenas admin)
+================================================================
+
+GET /pacientes
+→ Lista todos os pacientes com dados completos
+→ Combina dados de Usuario + Usuario_Paciente
+→ Mostra nome, email, telefone, status do tratamento, etc.
+(sem body)
+
+------------------------------------------------------------
+
+GET /pacientes/ativos
+→ Lista apenas pacientes com status_tratamento = "Ativo"
+→ Retorna também o total de pacientes ativos
+→ Útil para o painel de controle da fisioterapeuta
+(sem body)
+
+------------------------------------------------------------
+
+GET /pacientes/:id
+→ Busca um paciente completo pelo ID
+→ Retorna dados pessoais + planos de exercícios + últimas 5 execuções
+→ Visão geral do histórico do paciente
+Exemplo: GET /pacientes/2
+(sem body)
+
+------------------------------------------------------------
+
+POST /pacientes
+→ Admin cadastra um novo paciente pelo painel web
+→ Cria registro em Usuario + Usuario_Paciente de uma vez
+→ Senha já sai criptografada com bcrypt
+→ Status de tratamento começa como "Ativo" automaticamente
+{
+  "nome": "Beatriz Souza",
+  "email": "beatriz@email.com",
+  "senha": "123456",
+  "telefone": "11988887777",
+  "data_nascimento": "1995-03-15",
+  "observacoes": "Dor lombar crônica"
+}
+
+------------------------------------------------------------
+
+PUT /pacientes/:id
+→ Atualiza dados pessoais e clínicos do paciente
+→ Atualiza Usuario e Usuario_Paciente ao mesmo tempo
+→ Use status_tratamento "Ativo" ou "Inativo" para ativar/desativar
+Exemplo: PUT /pacientes/2
+{
+  "nome": "Beatriz Souza",
+  "email": "beatriz@email.com",
+  "telefone": "11988887777",
+  "data_nascimento": "1995-03-15",
+  "observacoes": "Dor lombar crônica",
+  "status_tratamento": "Ativo"
+}
+
+OBS: status_tratamento → "Ativo" ou "Inativo"
+
+------------------------------------------------------------
+
+DELETE /pacientes/:id
+→ Remove o paciente e todos os dados vinculados
+→ Deleta em cascata: execuções, notificações, planos e usuário
+→ Operação irreversível — use com cuidado!
+Exemplo: DELETE /pacientes/2
+(sem body)
+
+================================================================
+  EXERCICIOS (apenas admin)
+================================================================
+
+GET /exercicios
+→ Lista todos os exercícios do banco de exercícios
+→ Retorna título, descrição e arquivo de mídia vinculado
+(sem body)
+
+------------------------------------------------------------
+
+GET /exercicios/:id
+→ Busca um exercício específico com seu arquivo de mídia
+→ Retorna nome e tipo do arquivo (video/imagem)
+Exemplo: GET /exercicios/1
+(sem body)
+
+------------------------------------------------------------
+
+POST /exercicios
+→ Admin cadastra um novo exercício no banco
+→ id_arquivo vincula o vídeo ou imagem do exercício
+→ id_admin identifica quem criou o exercício
+{
+  "titulo": "Agachamento RPG",
+  "descricao": "Agachamento lento focado na postura",
+  "id_arquivo": 1,
+  "id_admin": 1
+}
+
+------------------------------------------------------------
+
+PUT /exercicios/:id
+→ Atualiza título, descrição ou arquivo de mídia do exercício
+Exemplo: PUT /exercicios/1
+{
+  "titulo": "Agachamento RPG Avançado",
+  "descricao": "Versão avançada do agachamento",
+  "id_arquivo": 2
+}
+
+------------------------------------------------------------
+
+DELETE /exercicios/:id
+→ Remove o exercício do banco
+→ Atenção: se estiver vinculado a um plano pode gerar erro
+→ Remova das Atividades_Prescritas antes se necessário
+Exemplo: DELETE /exercicios/1
+(sem body)
+
+================================================================
+  PLANOS DE EXERCICIOS (autenticado)
+================================================================
+
+GET /planos
+→ Lista todos os planos de todos os pacientes
+→ Retorna nome do paciente junto com os dados do plano
+(sem body)
+
+------------------------------------------------------------
+
+GET /planos/:id
+→ Busca um plano específico com TODOS os exercícios vinculados
+→ Retorna dados do plano + lista de exercícios prescritos
+→ Endpoint principal para o app mobile exibir o plano do paciente
+Exemplo: GET /planos/1
+(sem body)
+
+------------------------------------------------------------
+
+GET /planos/paciente/:id_paciente
+→ Lista todos os planos de um paciente específico
+→ Útil para histórico de planos no app mobile
+Exemplo: GET /planos/paciente/2
+(sem body)
+
+------------------------------------------------------------
+
+POST /planos
+→ Admin cria um novo plano de exercícios para um paciente
+→ id_admin = quem prescreveu, id_paciente = para quem é o plano
+→ frequencia: texto livre ex: "Diaria", "3x semana", "2x semana"
+{
+  "data_inicio": "2026-03-01",
+  "data_final": "2026-04-01",
+  "frequencia": "Diaria",
+  "repeticoes": 10,
+  "series": 3,
+  "observacoes": "Cuidado com a lombar",
+  "id_admin": 1,
+  "id_paciente": 2
+}
+
+------------------------------------------------------------
+
+PUT /planos/:id
+→ Atualiza datas, frequência, séries, repetições ou observações
+→ Útil quando a fisioterapeuta ajusta a conduta do tratamento
+Exemplo: PUT /planos/1
+{
+  "data_inicio": "2026-03-01",
+  "data_final": "2026-05-01",
+  "frequencia": "3x semana",
+  "repeticoes": 12,
+  "series": 3,
+  "observacoes": "Plano atualizado após reavaliação"
+}
+
+------------------------------------------------------------
+
+DELETE /planos/:id
+→ Remove o plano e todas as atividades prescritas vinculadas
+→ Deleta em cascata: Atividades_Prescritas + Plano_Exercicios
+Exemplo: DELETE /planos/1
+(sem body)
+
+================================================================
+  REGISTRO DE EXECUCAO (autenticado)
+================================================================
+
+GET /execucoes
+→ Lista todos os registros de execução de todos os pacientes
+→ Retorna nome do paciente junto com cada registro
+→ Ordenado do mais recente para o mais antigo
+(sem body)
+
+------------------------------------------------------------
+
+GET /execucoes/:id
+→ Busca um registro de execução específico pelo ID
+Exemplo: GET /execucoes/1
+(sem body)
+
+------------------------------------------------------------
+
+GET /execucoes/paciente/:id_paciente
+→ Histórico completo de execuções de um paciente
+→ Ordenado do mais recente para o mais antigo
+→ Usado para acompanhar evolução do paciente
+Exemplo: GET /execucoes/paciente/2
+(sem body)
+
+------------------------------------------------------------
+
+POST /execucoes
+→ Paciente registra que fez os exercícios (check-in)
+→ Principal funcionalidade do app mobile
+→ concluido: 1 = completou os exercícios, 0 = não completou
+→ dor_nivel: escala de 0 (sem dor) a 10 (dor máxima)
+{
+  "dor_nivel": 4,
+  "observacoes": "Senti leve dor no final",
+  "concluido": 1,
+  "id_paciente": 2
+}
+
+OBS: concluido → 1 = sim, 0 = não
+     dor_nivel → escala de 0 a 10
+
+------------------------------------------------------------
+
+PUT /execucoes/:id
+→ Corrige ou complementa um registro de execução existente
+Exemplo: PUT /execucoes/1
+{
+  "dor_nivel": 2,
+  "observacoes": "Melhorou bastante",
+  "concluido": 1
+}
+
+------------------------------------------------------------
+
+DELETE /execucoes/:id
+→ Remove um registro de execução
+Exemplo: DELETE /execucoes/1
+(sem body)
+
+================================================================
+  NOTIFICACOES (autenticado)
+================================================================
+
+GET /notificacoes
+→ Lista todas as notificações de todos os pacientes
+→ Retorna nome do paciente junto com cada notificação
+→ Ordenado da mais recente para a mais antiga
+(sem body)
+
+------------------------------------------------------------
+
+GET /notificacoes/paciente/:id_paciente
+→ Lista todas as notificações de um paciente (lidas e não lidas)
+→ Ordenado da mais recente para a mais antiga
+Exemplo: GET /notificacoes/paciente/2
+(sem body)
+
+------------------------------------------------------------
+
+GET /notificacoes/paciente/:id_paciente/nao-lidas
+→ Lista apenas notificações não lidas de um paciente
+→ Retorna também o total de não lidas
+→ Usado para exibir o contador de notificações no app mobile
+Exemplo: GET /notificacoes/paciente/2/nao-lidas
+(sem body)
+
+------------------------------------------------------------
+
+POST /notificacoes
+→ Admin envia uma notificação para um paciente
+→ id_postagem é opcional — vincula a notificação a uma postagem
+→ Status começa como "nao_lida" automaticamente
+{
+  "titulo": "Novo exercício disponível!",
+  "mensagem": "Seu plano de exercícios foi atualizado",
+  "id_paciente": 2,
+  "id_postagem": 1
+}
+
+------------------------------------------------------------
+
+PUT /notificacoes/:id/lida
+→ Marca uma notificação como lida
+→ Paciente usa quando abre/visualiza a notificação no app
+→ Não precisa de body
+Exemplo: PUT /notificacoes/1/lida
+(sem body)
+
+------------------------------------------------------------
+
+DELETE /notificacoes/:id
+→ Remove uma notificação
+Exemplo: DELETE /notificacoes/1
+(sem body)
+
+================================================================
+  POSTAGENS (autenticado)
+================================================================
+
+GET /postagens
+→ Lista todas as postagens (ativas e inativas)
+→ Retorna nome do autor (admin) junto com cada postagem
+→ Ordenado da mais recente para a mais antiga
+(sem body)
+
+------------------------------------------------------------
+
+GET /postagens/ativas
+→ Lista apenas postagens com status = "ativo"
+→ Endpoint principal para o app mobile exibir comunicados
+(sem body)
+
+------------------------------------------------------------
+
+GET /postagens/:id
+→ Busca uma postagem específica pelo ID
+Exemplo: GET /postagens/1
+(sem body)
+
+------------------------------------------------------------
+
+POST /postagens
+→ Admin publica um novo comunicado/aviso para os pacientes
+→ Status começa como "ativo" automaticamente
+→ id_admin identifica quem publicou
+{
+  "conteudo": "Lembrete: mantenha a postura correta durante os exercícios!",
+  "id_admin": 1
+}
+
+------------------------------------------------------------
+
+PUT /postagens/:id
+→ Edita o conteúdo ou muda o status de uma postagem
+→ Use status "inativo" para arquivar sem deletar
+Exemplo: PUT /postagens/1
+{
+  "conteudo": "Conteúdo atualizado da postagem",
+  "status": "ativo"
+}
+
+OBS: status → "ativo" ou "inativo"
+
+------------------------------------------------------------
+
+DELETE /postagens/:id
+→ Remove a postagem e todas as notificações vinculadas a ela
+→ Deleta em cascata: Notificacao + Postagem
+Exemplo: DELETE /postagens/1
+(sem body)
+
+================================================================
+  RESUMO DE PERMISSÕES
+================================================================
+
+  PÚBLICA (sem token):
+  → POST /auth/login        ← qualquer usuário faz login
+  → POST /auth/registro     ← paciente se cadastra pelo app
+
+  AUTENTICADO (qualquer usuário logado):
+  → GET  /auth/me           ← ver próprio perfil
+  → GET/POST/PUT/DELETE /execucoes
+  → GET/POST/PUT/DELETE /notificacoes
+  → GET/POST/PUT/DELETE /planos
+  → GET/POST/PUT/DELETE /postagens
+
+  APENAS ADMIN:
+  → GET/POST/PUT/DELETE /usuarios   ← gerenciar admins/profissionais
+  → GET/POST/PUT/DELETE /pacientes  ← gerenciar pacientes
+  → GET/POST/PUT/DELETE /exercicios ← gerenciar banco de exercícios
+
+================================================================
+  FLUXO COMPLETO — EXEMPLO DE USO
+================================================================
+
+  1. Admin faz login:
+     POST /auth/login → guarda o token
+
+  2. Admin cadastra paciente:
+     POST /pacientes → cria usuário + perfil paciente
+
+  3. Admin cadastra exercício:
+     POST /exercicios → adiciona ao banco de exercícios
+
+  4. Admin cria plano para o paciente:
+     POST /planos → define frequência, séries, repetições
+
+  5. Admin envia notificação ao paciente:
+     POST /notificacoes → avisa que o plano foi criado
+
+  6. Paciente faz login pelo app:
+     POST /auth/login → guarda o token
+
+  7. Paciente vê seu plano:
+     GET /planos/paciente/:id → lista planos com exercícios
+
+  8. Paciente registra execução (check-in):
+     POST /execucoes → informa dor e se concluiu
+
+  9. Paciente marca notificação como lida:
+     PUT /notificacoes/:id/lida
+
+  10. Admin acompanha evolução:
+      GET /execucoes/paciente/:id → histórico do paciente
+
+================================================================
