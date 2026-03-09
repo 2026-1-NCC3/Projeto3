@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="InputC">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">@drawable/custom_edit_text</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorHint">@color/azulHint</item>
+        <item name="android:textColor">@color/azulTexto</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="ButtonColorC">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="ButtonLightC">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/azulTexto</item>
+        <item name="fontFamily">@font/roboto_extralight</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAlignment">center</item>
+
+    </style>
+
+</resources>

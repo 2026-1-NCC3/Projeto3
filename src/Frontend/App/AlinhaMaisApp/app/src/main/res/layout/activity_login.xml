@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/main"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    android:background="@drawable/backgroundazul"
+
+    tools:context=".LoginActivity"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo_e_bg"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+
+        android:background="@drawable/custom_edit_text"
+        android:backgroundTint="@color/white80"
+
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp"
+            >
+
+            <EditText
+                style="@style/InputC"
+                android:id="@+id/loginEdit"
+                android:background="@drawable/custom_edit_text"
+                android:drawableLeft="@drawable/pessoa"
+                android:hint="Usuario"/>
+
+
+            <EditText
+                style="@style/InputC"
+                android:id="@+id/senhaEdit"
+                android:drawableLeft="@drawable/chave"
+                android:hint="Senha"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                style="@style/ButtonColorC"
+                android:id="@+id/loginButton"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/laranjaEscuro"
+                android:text="Login" />
+
+            <Button
+                style="@style/ButtonColorC"
+                android:id="@+id/cadastrarButton"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/azulEscuro"
+                android:text="Cadastrar-se" />
+
+            <Button
+                style="@style/ButtonLightC"
+                android:id="@+id/esqueciButton"
+                android:layout_marginTop="15sp"
+                android:text="Esqueci Minha Senha"
+                android:background="#00ffffff" />
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+

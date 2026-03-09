@@ -1,147 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
 
-    android:id="@+id/main"
-
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:layout_height="match_parent">
 
-    android:background="@drawable/backgroundazul"
-
-    tools:context=".MainActivity"
-    >
-
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/logo_e_bg"
-         />
+        android:text="Hello World"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-
-        android:background="@drawable/custom_edit_text"
-        android:backgroundTint="@color/white80"
-
-        app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="24dp"
-            >
-
-            <EditText
-                android:id="@+id/loginEdit"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-
-                android:background="@drawable/custom_edit_text"
-
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="20sp"
-                android:drawableLeft="@drawable/pessoa"
-                android:drawablePadding="10dp"
-
-                android:hint="Usuario"
-                android:textColorHint="@color/azulHint"
-                android:textColor="@color/azulTexto"
-
-                android:paddingLeft="25dp"
-                android:elevation="8dp" />
-
-
-            <EditText
-                android:id="@+id/senhaEdit"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-
-                android:background="@drawable/custom_edit_text"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="20sp"
-                android:drawableLeft="@drawable/chave"
-                android:drawablePadding="10dp"
-
-                android:hint="Senha"
-                android:textColor="@color/azulTexto"
-                android:textColorHint="@color/azulHint"
-                android:inputType="textPassword"
-                android:paddingLeft="25dp"
-
-                android:layout_marginTop="20dp"
-                android:elevation="8dp" />
-
-            <Button
-                android:id="@+id/loginButton"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="30dp"
-
-                android:backgroundTint="@color/laranjaEscuro"
-
-                android:text="Login"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:fontFamily="@font/roboto_bold"
-                />
-
-            <Button
-                android:id="@+id/cadastrarButton"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginTop="5dp"
-
-                android:backgroundTint="@color/azulEscuro"
-
-                android:text="Cadastrar-se"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:fontFamily="@font/roboto_bold"
-                android:elevation="8dp"
-                />
-
-            <Button
-                android:id="@+id/esqueciButton"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15sp"
-
-                android:text="Esqueci Minha Senha"
-                android:textAlignment="center"
-                android:fontFamily="@font/roboto_extralight"
-                android:textColor="@color/azulTexto"
-                android:textSize="15sp"
-
-                android:background="#00ffffff"
-                />
-
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</LinearLayout>
-
-
+</androidx.constraintlayout.widget.ConstraintLayout>
