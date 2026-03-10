@@ -200,52 +200,124 @@ Exemplo: DELETE /pacientes/2
 (sem body)
 
 ================================================================
+  ARQUIVOS (apenas admin)
+================================================================
+
+⚠️  IMPORTANTE — ORDEM DE USO:
+    1º Faça o upload do arquivo → anote o id_arquivo retornado
+    2º Use o id_arquivo ao criar ou atualizar um exercício
+
+------------------------------------------------------------
+
+POST /arquivos/upload
+→ Faz upload de um arquivo (imagem ou vídeo) para o servidor
+→ O arquivo é renomeado automaticamente com data e hora
+→ Retorna o id_arquivo para usar no cadastro do exercício
+→ No Postman: Body → form-data → Key: "arquivo" → Type: File
+→ Tipos permitidos: jpg, png, gif, mp4, mov, avi
+→ Tamanho máximo: 50MB
+(sem JSON — enviar como form-data)
+
+Resposta:
+{
+  "mensagem": "Arquivo enviado com sucesso!",
+  "id_arquivo": 4,
+  "tipo_arquivo": "video",
+  "caminho": "/uploads/10-03-2026_14-35-22.mp4"
+}
+
+------------------------------------------------------------
+
+GET /arquivos
+→ Lista todos os arquivos cadastrados no sistema
+(sem body)
+
+------------------------------------------------------------
+
+GET /arquivos/:id
+→ Busca um arquivo específico pelo ID
+Exemplo: GET /arquivos/1
+(sem body)
+
+------------------------------------------------------------
+
+DELETE /arquivos/:id
+→ Remove o arquivo do banco E da pasta física do servidor
+→ Operação irreversível — o arquivo some do servidor!
+Exemplo: DELETE /arquivos/1
+(sem body)
+
+----------------------------------------------------------------
+  ACESSAR ARQUIVO DIRETAMENTE NO NAVEGADOR OU APP:
+  http://localhost:3000/uploads/10-03-2026_14-35-22.mp4
+  http://localhost:3000/uploads/10-03-2026_14-36-10.png
+----------------------------------------------------------------
+
+================================================================
   EXERCICIOS (apenas admin)
 ================================================================
 
 GET /exercicios
 → Lista todos os exercícios do banco de exercícios
-→ Retorna título, descrição e arquivo de mídia vinculado
+→ Cada exercício já retorna a lista completa de arquivos vinculados
+→ Retorna título, descrição e array de arquivos (tipo + caminho)
 (sem body)
 
 ------------------------------------------------------------
 
 GET /exercicios/:id
-→ Busca um exercício específico com seu arquivo de mídia
-→ Retorna nome e tipo do arquivo (video/imagem)
+→ Busca um exercício específico com todos os arquivos vinculados
+→ Retorna título, descrição e array de arquivos
 Exemplo: GET /exercicios/1
 (sem body)
+
+Resposta:
+{
+  "id_exercicio": 1,
+  "titulo": "Alongamento Lombar",
+  "descricao": "Exercício para lombar",
+  "arquivos": [
+    { "id_arquivo": 1, "tipo_arquivo": "video", "nome_arquivo": "/uploads/10-03-2026_14-35-22.mp4" },
+    { "id_arquivo": 2, "tipo_arquivo": "imagem", "nome_arquivo": "/uploads/10-03-2026_14-36-10.png" }
+  ]
+}
 
 ------------------------------------------------------------
 
 POST /exercicios
 → Admin cadastra um novo exercício no banco
-→ id_arquivo vincula o vídeo ou imagem do exercício
+→ arquivos: array com os IDs dos arquivos já enviados via /arquivos/upload
+→ O campo "arquivos" é opcional — pode cadastrar sem mídia e vincular depois
 → id_admin identifica quem criou o exercício
 {
   "titulo": "Agachamento RPG",
   "descricao": "Agachamento lento focado na postura",
-  "id_arquivo": 1,
-  "id_admin": 1
+  "id_admin": 1,
+  "arquivos": [1, 2, 3]
 }
 
 ------------------------------------------------------------
 
 PUT /exercicios/:id
-→ Atualiza título, descrição ou arquivo de mídia do exercício
+→ Atualiza título e/ou descrição do exercício
+→ Se enviar o array "arquivos", substitui TODOS os arquivos anteriores
+→ Se não enviar "arquivos", mantém os arquivos atuais
 Exemplo: PUT /exercicios/1
 {
   "titulo": "Agachamento RPG Avançado",
   "descricao": "Versão avançada do agachamento",
-  "id_arquivo": 2
+  "arquivos": [2, 3]
 }
+
+OBS: o campo "arquivos" é opcional no PUT.
+     Se omitido, os arquivos atuais são preservados.
 
 ------------------------------------------------------------
 
 DELETE /exercicios/:id
-→ Remove o exercício do banco
-→ Atenção: se estiver vinculado a um plano pode gerar erro
-→ Remova das Atividades_Prescritas antes se necessário
+→ Remove o exercício e todos os vínculos com arquivos
+→ Deleta em cascata: Exercicio_Arquivos + Exercicio
+→ Atenção: os arquivos físicos NÃO são deletados — use DELETE /arquivos/:id separadamente
 Exemplo: DELETE /exercicios/1
 (sem body)
 
@@ -262,8 +334,9 @@ GET /planos
 
 GET /planos/:id
 → Busca um plano específico com TODOS os exercícios vinculados
-→ Retorna dados do plano + lista de exercícios prescritos
+→ Retorna dados do plano + lista completa de exercícios prescritos
 → Endpoint principal para o app mobile exibir o plano do paciente
+→ Cada exercício já vem com título, descrição e arquivo de mídia
 Exemplo: GET /planos/1
 (sem body)
 
@@ -271,6 +344,7 @@ Exemplo: GET /planos/1
 
 GET /planos/paciente/:id_paciente
 → Lista todos os planos de um paciente específico
+→ Cada plano já vem com seus exercícios vinculados
 → Útil para histórico de planos no app mobile
 Exemplo: GET /planos/paciente/2
 (sem body)
@@ -281,6 +355,8 @@ POST /planos
 → Admin cria um novo plano de exercícios para um paciente
 → id_admin = quem prescreveu, id_paciente = para quem é o plano
 → frequencia: texto livre ex: "Diaria", "3x semana", "2x semana"
+→ exercicios: array com os IDs dos exercícios a vincular ao plano
+→ Obrigatório ter pelo menos 1 exercício no array
 {
   "data_inicio": "2026-03-01",
   "data_final": "2026-04-01",
@@ -289,13 +365,16 @@ POST /planos
   "series": 3,
   "observacoes": "Cuidado com a lombar",
   "id_admin": 1,
-  "id_paciente": 2
+  "id_paciente": 2,
+  "exercicios": [1, 2, 3]
 }
 
 ------------------------------------------------------------
 
 PUT /planos/:id
 → Atualiza datas, frequência, séries, repetições ou observações
+→ Se enviar o array "exercicios", substitui TODOS os exercícios anteriores
+→ Se não enviar "exercicios", mantém os exercícios atuais
 → Útil quando a fisioterapeuta ajusta a conduta do tratamento
 Exemplo: PUT /planos/1
 {
@@ -304,8 +383,12 @@ Exemplo: PUT /planos/1
   "frequencia": "3x semana",
   "repeticoes": 12,
   "series": 3,
-  "observacoes": "Plano atualizado após reavaliação"
+  "observacoes": "Plano atualizado após reavaliação",
+  "exercicios": [1, 3]
 }
+
+OBS: o campo "exercicios" é opcional no PUT.
+     Se omitido, os exercícios atuais são preservados.
 
 ------------------------------------------------------------
 
@@ -507,6 +590,7 @@ Exemplo: DELETE /postagens/1
   → GET/POST/PUT/DELETE /usuarios   ← gerenciar admins/profissionais
   → GET/POST/PUT/DELETE /pacientes  ← gerenciar pacientes
   → GET/POST/PUT/DELETE /exercicios ← gerenciar banco de exercícios
+  → POST/GET/DELETE     /arquivos   ← upload e gestão de arquivos
 
 ================================================================
   FLUXO COMPLETO — EXEMPLO DE USO
@@ -518,28 +602,31 @@ Exemplo: DELETE /postagens/1
   2. Admin cadastra paciente:
      POST /pacientes → cria usuário + perfil paciente
 
-  3. Admin cadastra exercício:
-     POST /exercicios → adiciona ao banco de exercícios
+  3. Admin faz upload dos arquivos do exercício:
+     POST /arquivos/upload → envia vídeo ou imagem, anota o id_arquivo
 
-  4. Admin cria plano para o paciente:
+  4. Admin cadastra exercício:
+     POST /exercicios → vincula os ids dos arquivos no array "arquivos"
+
+  5. Admin cria plano para o paciente:
      POST /planos → define frequência, séries, repetições
 
-  5. Admin envia notificação ao paciente:
+  6. Admin envia notificação ao paciente:
      POST /notificacoes → avisa que o plano foi criado
 
-  6. Paciente faz login pelo app:
+  7. Paciente faz login pelo app:
      POST /auth/login → guarda o token
 
-  7. Paciente vê seu plano:
+  8. Paciente vê seu plano:
      GET /planos/paciente/:id → lista planos com exercícios
 
-  8. Paciente registra execução (check-in):
+  9. Paciente registra execução (check-in):
      POST /execucoes → informa dor e se concluiu
 
-  9. Paciente marca notificação como lida:
+  10. Paciente marca notificação como lida:
      PUT /notificacoes/:id/lida
 
-  10. Admin acompanha evolução:
+  11. Admin acompanha evolução:
       GET /execucoes/paciente/:id → histórico do paciente
 
 ================================================================

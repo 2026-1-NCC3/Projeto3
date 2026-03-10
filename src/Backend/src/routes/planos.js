@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /planos/:id — Busca um plano com seus exercícios
+// GET /planos/:id — Busca plano com TODOS os exercícios vinculados
 router.get("/:id", async (req, res) => {
   try {
     const db = getDb();
@@ -39,11 +39,13 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ erro: "Plano não encontrado" });
     }
 
-    // Busca os exercícios do plano
+    // Busca todos os exercícios vinculados ao plano
     const exercicios = await db.sql`
-      SELECT e.id_exercicio, e.titulo, e.descricao
+      SELECT e.id_exercicio, e.titulo, e.descricao,
+             a.nome_arquivo, a.tipo_arquivo
       FROM Atividades_Prescritas ap
       JOIN Exercicio e ON ap.id_exercicio = e.id_exercicio
+      LEFT JOIN Arquivo a ON e.id_arquivo = a.id_arquivo
       WHERE ap.id_plano = ${id}
     `;
 
@@ -53,26 +55,41 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// GET /planos/paciente/:id_paciente — Planos de um paciente específico
+// GET /planos/paciente/:id_paciente — Planos de um paciente com exercícios
 router.get("/paciente/:id_paciente", async (req, res) => {
   try {
     const db = getDb();
     const { id_paciente } = req.params;
 
     const planos = await db.sql`
-      SELECT p.id_plano, p.data_inicio, p.data_final,
-             p.frequencia, p.repeticoes, p.series, p.observacoes
-      FROM Plano_Exercicios p
-      WHERE p.id_paciente = ${id_paciente}
+      SELECT id_plano, data_inicio, data_final,
+             frequencia, repeticoes, series, observacoes
+      FROM Plano_Exercicios
+      WHERE id_paciente = ${id_paciente}
     `;
 
-    res.json(planos);
+    // Para cada plano, busca os exercícios vinculados
+    const planosComExercicios = await Promise.all(
+      planos.map(async (plano) => {
+        const exercicios = await db.sql`
+          SELECT e.id_exercicio, e.titulo, e.descricao,
+                 a.nome_arquivo, a.tipo_arquivo
+          FROM Atividades_Prescritas ap
+          JOIN Exercicio e ON ap.id_exercicio = e.id_exercicio
+          LEFT JOIN Arquivo a ON e.id_arquivo = a.id_arquivo
+          WHERE ap.id_plano = ${plano.id_plano}
+        `;
+        return { ...plano, exercicios };
+      }),
+    );
+
+    res.json(planosComExercicios);
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
 });
 
-// POST /planos — Cria novo plano
+// POST /planos — Cria plano e vincula vários exercícios
 router.post("/", async (req, res) => {
   try {
     const db = getDb();
@@ -85,7 +102,8 @@ router.post("/", async (req, res) => {
       observacoes,
       id_admin,
       id_paciente,
-    } = req.body;
+      exercicios,
+    } = req.body; // exercicios = [1, 2, 3]
 
     if (!data_inicio || !data_final || !id_paciente) {
       return res.status(400).json({
@@ -93,20 +111,46 @@ router.post("/", async (req, res) => {
       });
     }
 
+    if (!exercicios || exercicios.length === 0) {
+      return res.status(400).json({
+        erro: 'Informe pelo menos um exercício no array "exercicios"',
+      });
+    }
+
+    // Cria o plano
     await db.sql`
-      INSERT INTO Plano_Exercicios 
+      INSERT INTO Plano_Exercicios
         (data_inicio, data_final, frequencia, repeticoes, series, observacoes, id_admin, id_paciente)
-      VALUES 
+      VALUES
         (${data_inicio}, ${data_final}, ${frequencia}, ${repeticoes}, ${series}, ${observacoes}, ${id_admin}, ${id_paciente})
     `;
 
-    res.status(201).json({ mensagem: "Plano criado com sucesso!" });
+    // Pega o ID do plano recém criado
+    const resultado = await db.sql`
+      SELECT id_plano FROM Plano_Exercicios 
+      ORDER BY id_plano DESC LIMIT 1
+    `;
+    const id_plano = resultado[0].id_plano;
+
+    // Vincula cada exercício ao plano na tabela Atividades_Prescritas
+    for (const id_exercicio of exercicios) {
+      await db.sql`
+        INSERT INTO Atividades_Prescritas (id_plano, id_exercicio)
+        VALUES (${id_plano}, ${id_exercicio})
+      `;
+    }
+
+    res.status(201).json({
+      mensagem: "Plano criado com sucesso!",
+      id_plano,
+      exercicios_vinculados: exercicios.length,
+    });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
 });
 
-// PUT /planos/:id — Atualiza plano
+// PUT /planos/:id — Atualiza plano e substitui exercícios
 router.put("/:id", async (req, res) => {
   try {
     const db = getDb();
@@ -118,7 +162,8 @@ router.put("/:id", async (req, res) => {
       repeticoes,
       series,
       observacoes,
-    } = req.body;
+      exercicios,
+    } = req.body; // exercicios = [1, 2, 3]
 
     await db.sql`
       UPDATE Plano_Exercicios
@@ -128,13 +173,26 @@ router.put("/:id", async (req, res) => {
       WHERE id_plano = ${id}
     `;
 
+    // Se vieram novos exercícios, substitui todos os anteriores
+    if (exercicios && exercicios.length > 0) {
+      await db.sql`
+        DELETE FROM Atividades_Prescritas WHERE id_plano = ${id}
+      `;
+      for (const id_exercicio of exercicios) {
+        await db.sql`
+          INSERT INTO Atividades_Prescritas (id_plano, id_exercicio)
+          VALUES (${id}, ${id_exercicio})
+        `;
+      }
+    }
+
     res.json({ mensagem: "Plano atualizado com sucesso!" });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
 });
 
-// DELETE /planos/:id — Deleta plano
+// DELETE /planos/:id — Deleta plano e exercícios vinculados
 router.delete("/:id", async (req, res) => {
   try {
     const db = getDb();

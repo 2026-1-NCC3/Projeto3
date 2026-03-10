@@ -11,6 +11,7 @@ const postagensRoutes = require("./routes/postagens.js");
 const pacientesRoutes = require("./routes/pacientes.js");
 const { autenticar, apenasAdmin } = require("./middlewares/auth.js");
 const authRoutes = require("./routes/auth.js");
+const arquivosRoutes = require("./routes/arquivos.js");
 
 require("dotenv").config();
 
@@ -60,6 +61,8 @@ async function startServer() {
   app.use("/pacientes", autenticar, apenasAdmin, pacientesRoutes);
   app.use("/exercicios", autenticar, apenasAdmin, exerciciosRoutes);
   app.use("/usuarios", autenticar, apenasAdmin, usuariosRoutes);
+  app.use("/uploads", express.static("src/uploads"));
+  app.use("/arquivos", autenticar, apenasAdmin, arquivosRoutes);
 
   app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
