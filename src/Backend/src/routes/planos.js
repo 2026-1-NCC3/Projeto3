@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /planos/:id — Busca plano com TODOS os exercícios vinculados
+// GET /planos/:id — Busca plano com exercícios e arquivos
 router.get("/:id", async (req, res) => {
   try {
     const db = getDb();
@@ -39,17 +39,27 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ erro: "Plano não encontrado" });
     }
 
-    // Busca todos os exercícios vinculados ao plano
     const exercicios = await db.sql`
-      SELECT e.id_exercicio, e.titulo, e.descricao,
-             a.nome_arquivo, a.tipo_arquivo
+      SELECT e.id_exercicio, e.titulo, e.descricao
       FROM Atividades_Prescritas ap
       JOIN Exercicio e ON ap.id_exercicio = e.id_exercicio
-      LEFT JOIN Arquivo a ON e.id_arquivo = a.id_arquivo
       WHERE ap.id_plano = ${id}
     `;
 
-    res.json({ ...plano[0], exercicios });
+    // Para cada exercício busca os arquivos vinculados
+    const exerciciosComArquivos = await Promise.all(
+      exercicios.map(async (exercicio) => {
+        const arquivos = await db.sql`
+          SELECT a.id_arquivo, a.tipo_arquivo, a.nome_arquivo
+          FROM Exercicio_Arquivos ea
+          JOIN Arquivo a ON ea.id_arquivo = a.id_arquivo
+          WHERE ea.id_exercicio = ${exercicio.id_exercicio}
+        `;
+        return { ...exercicio, arquivos };
+      }),
+    );
+
+    res.json({ ...plano[0], exercicios: exerciciosComArquivos });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
@@ -68,18 +78,29 @@ router.get("/paciente/:id_paciente", async (req, res) => {
       WHERE id_paciente = ${id_paciente}
     `;
 
-    // Para cada plano, busca os exercícios vinculados
     const planosComExercicios = await Promise.all(
       planos.map(async (plano) => {
         const exercicios = await db.sql`
-          SELECT e.id_exercicio, e.titulo, e.descricao,
-                 a.nome_arquivo, a.tipo_arquivo
+          SELECT e.id_exercicio, e.titulo, e.descricao
           FROM Atividades_Prescritas ap
           JOIN Exercicio e ON ap.id_exercicio = e.id_exercicio
-          LEFT JOIN Arquivo a ON e.id_arquivo = a.id_arquivo
           WHERE ap.id_plano = ${plano.id_plano}
         `;
-        return { ...plano, exercicios };
+
+        // Para cada exercício busca os arquivos vinculados
+        const exerciciosComArquivos = await Promise.all(
+          exercicios.map(async (exercicio) => {
+            const arquivos = await db.sql`
+              SELECT a.id_arquivo, a.tipo_arquivo, a.nome_arquivo
+              FROM Exercicio_Arquivos ea
+              JOIN Arquivo a ON ea.id_arquivo = a.id_arquivo
+              WHERE ea.id_exercicio = ${exercicio.id_exercicio}
+            `;
+            return { ...exercicio, arquivos };
+          }),
+        );
+
+        return { ...plano, exercicios: exerciciosComArquivos };
       }),
     );
 
@@ -103,7 +124,7 @@ router.post("/", async (req, res) => {
       id_admin,
       id_paciente,
       exercicios,
-    } = req.body; // exercicios = [1, 2, 3]
+    } = req.body;
 
     if (!data_inicio || !data_final || !id_paciente) {
       return res.status(400).json({
@@ -117,7 +138,6 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Cria o plano
     await db.sql`
       INSERT INTO Plano_Exercicios
         (data_inicio, data_final, frequencia, repeticoes, series, observacoes, id_admin, id_paciente)
@@ -125,14 +145,12 @@ router.post("/", async (req, res) => {
         (${data_inicio}, ${data_final}, ${frequencia}, ${repeticoes}, ${series}, ${observacoes}, ${id_admin}, ${id_paciente})
     `;
 
-    // Pega o ID do plano recém criado
     const resultado = await db.sql`
       SELECT id_plano FROM Plano_Exercicios 
       ORDER BY id_plano DESC LIMIT 1
     `;
     const id_plano = resultado[0].id_plano;
 
-    // Vincula cada exercício ao plano na tabela Atividades_Prescritas
     for (const id_exercicio of exercicios) {
       await db.sql`
         INSERT INTO Atividades_Prescritas (id_plano, id_exercicio)
@@ -163,7 +181,7 @@ router.put("/:id", async (req, res) => {
       series,
       observacoes,
       exercicios,
-    } = req.body; // exercicios = [1, 2, 3]
+    } = req.body;
 
     await db.sql`
       UPDATE Plano_Exercicios
@@ -173,11 +191,8 @@ router.put("/:id", async (req, res) => {
       WHERE id_plano = ${id}
     `;
 
-    // Se vieram novos exercícios, substitui todos os anteriores
     if (exercicios && exercicios.length > 0) {
-      await db.sql`
-        DELETE FROM Atividades_Prescritas WHERE id_plano = ${id}
-      `;
+      await db.sql`DELETE FROM Atividades_Prescritas WHERE id_plano = ${id}`;
       for (const id_exercicio of exercicios) {
         await db.sql`
           INSERT INTO Atividades_Prescritas (id_plano, id_exercicio)
