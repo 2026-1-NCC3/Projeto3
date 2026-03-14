@@ -57,6 +57,7 @@
                 android:id="@+id/senhaEdit"
                 android:drawableLeft="@drawable/chave"
                 android:hint="Senha"
+                android:inputType="textPassword"
                 android:layout_marginTop="20dp" />
 
             <Button

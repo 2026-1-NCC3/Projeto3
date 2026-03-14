@@ -71,6 +71,7 @@
                 android:id="@+id/repitaSenhaEdit"
                 android:drawableLeft="@drawable/chave"
                 android:hint="Repita sua Senha"
+                android:inputType="textPassword"
                 android:layout_marginTop="20dp" />
 
 
