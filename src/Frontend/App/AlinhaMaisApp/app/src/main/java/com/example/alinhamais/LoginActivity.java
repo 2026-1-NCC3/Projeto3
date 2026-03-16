@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     prefs.edit()
                             .putString("token", body.getToken())
                             .putString("nome", body.getUsuario().getNome())
+                            .putString("email", body.getUsuario().getEmail())  // ← adiciona essa linha
                             .putString("perfil", body.getUsuario().getPerfil())
                             .putInt("id_usuario", body.getUsuario().getId())
                             .apply();

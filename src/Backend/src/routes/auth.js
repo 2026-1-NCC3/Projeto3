@@ -148,6 +148,58 @@ router.get(
       res.status(500).json({ erro: error.message });
     }
   },
+
+  // PUT /auth/alterar-senha
+  router.put(
+    "/alterar-senha",
+    require("../middlewares/auth").autenticar,
+    async (req, res) => {
+      try {
+        const db = getDb();
+        const { senha_atual, nova_senha } = req.body;
+        const id_usuario = req.usuario.id;
+
+        if (!senha_atual || !nova_senha) {
+          return res.status(400).json({
+            erro: "senha_atual e nova_senha são obrigatórios",
+          });
+        }
+
+        // Busca senha atual do banco
+        const usuario = await db.sql`
+      SELECT senha FROM Usuario WHERE id_usuario = ${id_usuario}
+    `;
+
+        if (usuario.length === 0) {
+          return res.status(404).json({ erro: "Usuário não encontrado" });
+        }
+
+        // Verifica senha atual — suporta bcrypt e legado
+        let senhaValida = false;
+        if (usuario[0].senha.startsWith("$2")) {
+          senhaValida = await verificarSenha(senha_atual, usuario[0].senha);
+        } else {
+          senhaValida = senha_atual === usuario[0].senha;
+        }
+
+        if (!senhaValida) {
+          return res.status(401).json({ erro: "Senha atual incorreta" });
+        }
+
+        // Criptografa e salva a nova senha
+        const novaSenhaCriptografada = await hashSenha(nova_senha);
+
+        await db.sql`
+      UPDATE Usuario SET senha = ${novaSenhaCriptografada}
+      WHERE id_usuario = ${id_usuario}
+    `;
+
+        res.json({ mensagem: "Senha alterada com sucesso!" });
+      } catch (error) {
+        res.status(500).json({ erro: error.message });
+      }
+    },
+  ),
 );
 
 module.exports = router;
