@@ -18,28 +18,34 @@ public class PerfilFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-        // Pega dados do usuário logado
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("MayaPrefs", requireActivity().MODE_PRIVATE);
 
-        String nome   = prefs.getString("nome", "Usuário");
-        String email  = prefs.getString("email", "");
-        String perfil = prefs.getString("perfil", "");
+        String nome     = prefs.getString("nome", "Usuário");
+        String email    = prefs.getString("email", "");
+        String telefone = prefs.getString("telefone", "Não informado");
+        int    id       = prefs.getInt("id_usuario", 0);
 
-        // Preenche os campos
-        TextView tvNome   = view.findViewById(R.id.tvNome);
-        TextView tvEmail  = view.findViewById(R.id.tvEmail);
-        TextView tvPerfil = view.findViewById(R.id.tvPerfil);
+        TextView tvNome     = view.findViewById(R.id.tvNome);
+        TextView tvId       = view.findViewById(R.id.tvId);
+        TextView tvEmail    = view.findViewById(R.id.tvEmail);
+        TextView tvTelefone = view.findViewById(R.id.tvTelefone);
 
         tvNome.setText(nome);
-        tvEmail.setText(email);
-        tvPerfil.setText(perfil.equals("admin") ? "Administrador" : "Paciente");
+        tvId.setText("ID: " + id);
+        tvEmail.setText("Email: " + email);
+        tvTelefone.setText("Telefone: " + telefone);
 
-        // Botão logout
-        Button logoutButton = view.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
+        // Botão Alterar Senha → abre AlterarSenhaActivity
+        Button btnAlterarSenha = view.findViewById(R.id.btnAlterarSenha);
+        btnAlterarSenha.setOnClickListener(v -> {
+            startActivity(new Intent(requireActivity(), AlterarSenhaActivity.class));
+        });
+
+        // Botão Logout
+        Button btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
             prefs.edit().clear().apply();
-
             Intent intent = new Intent(requireActivity(), LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

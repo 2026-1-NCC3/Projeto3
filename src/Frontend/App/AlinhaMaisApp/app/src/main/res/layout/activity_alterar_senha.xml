@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/background_main"
+    android:padding="32dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/etSenhaAtual"
+                android:drawableLeft="@drawable/chave"
+                android:hint="Senha Atual"
+                android:inputType="textPassword"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/etNovaSenha"
+                android:drawableLeft="@drawable/chave"
+                android:hint="Nova Senha"
+                android:inputType="textPassword"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/etRepitaNovaSenha"
+                android:drawableLeft="@drawable/chave"
+                android:hint="Repita a Nova Senha"
+                android:inputType="textPassword"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                style="@style/ButtonColor"
+                android:id="@+id/btnConfirmarSenha"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/secundariaClaro"
+                android:text="Alterar Senha"/>
+
+            <Button
+                style="@style/ButtonColor"
+                android:id="@+id/btnVoltarSenha"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/secundariaClaro"
+                android:text="Voltar"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
