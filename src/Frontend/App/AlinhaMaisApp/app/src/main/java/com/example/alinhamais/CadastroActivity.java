@@ -1,5 +1,6 @@
 package com.example.alinhamais;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,47 +13,81 @@ import com.example.alinhamais.api.RetrofitClient;
 import com.example.alinhamais.models.CadastroRequest;
 import com.example.alinhamais.models.LoginResponse;
 
+import java.util.Calendar;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    private EditText nomeEdit, emailEdit, telefoneEdit, dataNascimentoEdit, senhaEdit, repitaSenhaEdit;
-    private Button cadastrarButton, voltarButton;
+    private EditText nomeEdit, emailEdit, telefoneEdit, senhaEdit, repitaSenhaEdit;
+    private Button cadastrarButton, voltarButton, dataNascimentoBtn;
+    private String dataNascimentoSelecionada = ""; // guarda no formato AAAA-MM-DD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        nomeEdit       = findViewById(R.id.nomeEdit);
-        emailEdit      = findViewById(R.id.emailEdit);
-        telefoneEdit = findViewById(R.id.telefoneEdit);
-        dataNascimentoEdit = findViewById(R.id.dataNascimentoEdit);
-        senhaEdit      = findViewById(R.id.senhaEdit);
-        repitaSenhaEdit = findViewById(R.id.repitaSenhaEdit);
-        cadastrarButton = findViewById(R.id.cadastrarButton);
-        voltarButton   = findViewById(R.id.voltarButton);
+        nomeEdit            = findViewById(R.id.nomeEdit);
+        emailEdit           = findViewById(R.id.emailEdit);
+        telefoneEdit        = findViewById(R.id.telefoneEdit);
+        senhaEdit           = findViewById(R.id.senhaEdit);
+        repitaSenhaEdit     = findViewById(R.id.repitaSenhaEdit);
+        cadastrarButton     = findViewById(R.id.cadastrarButton);
+        voltarButton        = findViewById(R.id.voltarButton);
+        dataNascimentoBtn   = findViewById(R.id.dataNascimentoEdit);
+
+        // Abre o calendário ao clicar
+        dataNascimentoBtn.setOnClickListener(v -> abrirCalendario());
 
         cadastrarButton.setOnClickListener(v -> fazerCadastro());
 
-        voltarButton.setOnClickListener(v -> {
-            startActivity(new Intent(CadastroActivity.this, LoginActivity.class));
-        });
+        voltarButton.setOnClickListener(v ->
+                startActivity(new Intent(CadastroActivity.this, LoginActivity.class)));
+    }
+
+    private void abrirCalendario() {
+        Calendar calendario = Calendar.getInstance();
+        int ano = calendario.get(Calendar.YEAR);
+        int mes = calendario.get(Calendar.MONTH);
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePicker = new DatePickerDialog(
+                this,
+                (view, anoPick, mesPick, diaPick) -> {
+                    // Formata para AAAA-MM-DD (formato do banco)
+                    String mesFormatado = String.format("%02d", mesPick + 1);
+                    String diaFormatado = String.format("%02d", diaPick);
+                    dataNascimentoSelecionada = anoPick + "-" + mesFormatado + "-" + diaFormatado;
+
+                    // Mostra no botão no formato DD/MM/AAAA (mais legível)
+                    dataNascimentoBtn.setText("Nascimento: " + diaFormatado + "/" + mesFormatado + "/" + anoPick);
+                },
+                ano, mes, dia
+        );
+
+        // Impede selecionar data futura
+        datePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        datePicker.show();
     }
 
     private void fazerCadastro() {
-        String nome   = nomeEdit.getText().toString().trim();
-        String email  = emailEdit.getText().toString().trim();
+        String nome     = nomeEdit.getText().toString().trim();
+        String email    = emailEdit.getText().toString().trim();
         String telefone = telefoneEdit.getText().toString().trim();
-        String dataNascimento = dataNascimentoEdit.getText().toString().trim();
-        String senha  = senhaEdit.getText().toString().trim();
-        String repita = repitaSenhaEdit.getText().toString().trim();
+        String senha    = senhaEdit.getText().toString().trim();
+        String repita   = repitaSenhaEdit.getText().toString().trim();
 
-        // Validações
-        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty() || dataNascimento.isEmpty()) {
+        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (dataNascimentoSelecionada.isEmpty()) {
+            Toast.makeText(this, "Selecione sua data de nascimento!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -63,7 +98,9 @@ public class CadastroActivity extends AppCompatActivity {
 
         cadastrarButton.setEnabled(false);
 
-        CadastroRequest request = new CadastroRequest(nome, email, senha, telefone, dataNascimento);
+        CadastroRequest request = new CadastroRequest(
+                nome, email, senha, telefone, dataNascimentoSelecionada
+        );
 
         RetrofitClient.getApiService().registro(request).enqueue(new Callback<LoginResponse>() {
 
@@ -75,8 +112,6 @@ public class CadastroActivity extends AppCompatActivity {
                     Toast.makeText(CadastroActivity.this,
                             "Cadastro realizado! Faça login.",
                             Toast.LENGTH_SHORT).show();
-
-                    // Volta para o login após cadastro
                     startActivity(new Intent(CadastroActivity.this, LoginActivity.class));
                     finish();
 

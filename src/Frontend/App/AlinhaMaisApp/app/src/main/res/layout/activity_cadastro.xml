@@ -65,15 +65,15 @@
                 android:imeOptions="actionNext"
                 android:layout_marginTop="20dp"/>
 
-            <EditText
-                style="@style/Input"
+            <Button
+                style="@style/ButtonColor"
                 android:id="@+id/dataNascimentoEdit"
-                android:drawableLeft="@drawable/chave"
-                android:hint="Data de Nascimento (AAAA-MM-DD)"
-                android:inputType="date"
-                android:maxLines="1"
-                android:imeOptions="actionNext"
-                android:layout_marginTop="20dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/primariaEscuro"
+                android:text="Selecionar Data de Nascimento"
+                android:textSize="14sp"/>
 
             <EditText
                 style="@style/Input"
@@ -106,7 +106,7 @@
                 style="@style/ButtonLight"
                 android:id="@+id/voltarButton"
                 android:layout_width="299dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:background="#00ffffff"
                 android:text="Voltar ao Login"/>
 
