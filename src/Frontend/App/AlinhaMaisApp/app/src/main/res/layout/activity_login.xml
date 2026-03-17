@@ -55,7 +55,10 @@
                 android:id="@+id/loginEdit"
                 android:background="@drawable/custom_round_square"
                 android:drawableLeft="@drawable/pessoa"
-                android:hint="Usuario"/>
+                android:hint="Usuario"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
 
 
             <EditText
@@ -64,7 +67,10 @@
                 android:drawableLeft="@drawable/chave"
                 android:hint="Senha"
                 android:inputType="textPassword"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
 
             <Button
                 style="@style/ButtonColor"

@@ -3,7 +3,6 @@ package com.example.alinhamais;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.alinhamais.api.RetrofitClient;
 import com.example.alinhamais.models.LoginRequest;
 import com.example.alinhamais.models.LoginResponse;
+import com.example.alinhamais.models.MeResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,16 +28,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginEdit      = findViewById(R.id.loginEdit);
-        senhaEdit      = findViewById(R.id.senhaEdit);
-        loginButton    = findViewById(R.id.loginButton);
+        loginEdit       = findViewById(R.id.loginEdit);
+        senhaEdit       = findViewById(R.id.senhaEdit);
+        loginButton     = findViewById(R.id.loginButton);
         cadastrarButton = findViewById(R.id.cadastrarButton);
 
         loginButton.setOnClickListener(v -> fazerLogin());
 
-        cadastrarButton.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, CadastroActivity.class));
-        });
+        cadastrarButton.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, CadastroActivity.class)));
     }
 
     private void fazerLogin() {
@@ -51,50 +50,83 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setEnabled(false);
 
-        LoginRequest request = new LoginRequest(email, senha);
+        RetrofitClient.getApiService().login(new LoginRequest(email, senha))
+                .enqueue(new Callback<LoginResponse>() {
 
-        RetrofitClient.getApiService().login(request).enqueue(new Callback<LoginResponse>() {
+                    @Override
+                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                        loginButton.setEnabled(true);
 
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                loginButton.setEnabled(true);
+                        if (response.isSuccessful() && response.body() != null) {
+                            salvarDadosEIrParaMain(response.body());
+                        } else {
+                            Toast.makeText(LoginActivity.this,
+                                    "Email ou senha inválidos",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-                if (response.isSuccessful() && response.body() != null) {
-                    LoginResponse body = response.body();
+                    @Override
+                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        loginButton.setEnabled(true);
+                        Toast.makeText(LoginActivity.this,
+                                "Erro de conexão. Tente novamente.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
-                    // Salva token e dados do usuário localmente
-                    SharedPreferences prefs = getSharedPreferences("MayaPrefs", MODE_PRIVATE);
-                    prefs.edit()
-                            .putString("token", body.getToken())
-                            .putString("nome", body.getUsuario().getNome())
-                            .putString("email", body.getUsuario().getEmail())  // ← adiciona essa linha
-                            .putString("perfil", body.getUsuario().getPerfil())
-                            .putInt("id_usuario", body.getUsuario().getId())
-                            .apply();
+    private void salvarDadosEIrParaMain(LoginResponse body) {
+        String token = body.getToken();
 
-                    Toast.makeText(LoginActivity.this,
-                            "Bem-vindo, " + body.getUsuario().getNome() + "!",
-                            Toast.LENGTH_SHORT).show();
+        // Busca dados completos (telefone, data nascimento) via /auth/me
+        RetrofitClient.getApiService()
+                .getMe("Bearer " + token)
+                .enqueue(new Callback<MeResponse>() {
 
-                    // Vai para MainActivity e limpa o histórico de navegação
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    @Override
+                    public void onResponse(Call<MeResponse> call, Response<MeResponse> response) {
+                        SharedPreferences.Editor editor = getSharedPreferences("MayaPrefs", MODE_PRIVATE).edit();
 
-                } else {
-                    Toast.makeText(LoginActivity.this,
-                            "Email ou senha inválidos",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
+                        editor.putString("token", token);
+                        editor.putString("nome", body.getUsuario().getNome());
+                        editor.putString("email", body.getUsuario().getEmail());
+                        editor.putString("perfil", body.getUsuario().getPerfil());
+                        editor.putInt("id_usuario", body.getUsuario().getId());
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                loginButton.setEnabled(true);
-                Toast.makeText(LoginActivity.this,
-                        "Erro de conexão. Tente novamente.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+                        // Salva telefone e data se /me retornou OK
+                        if (response.isSuccessful() && response.body() != null) {
+                            MeResponse me = response.body();
+                            editor.putString("telefone", me.getTelefone() != null ? me.getTelefone() : "");
+                            editor.putString("data_nascimento", me.getDataNascimento() != null ? me.getDataNascimento() : "");
+                        }
+
+                        editor.apply();
+
+                        Toast.makeText(LoginActivity.this,
+                                "Bem-vindo, " + body.getUsuario().getNome() + "!",
+                                Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MeResponse> call, Throwable t) {
+                        // Se /me falhar, loga com dados básicos mesmo
+                        getSharedPreferences("MayaPrefs", MODE_PRIVATE).edit()
+                                .putString("token", token)
+                                .putString("nome", body.getUsuario().getNome())
+                                .putString("email", body.getUsuario().getEmail())
+                                .putString("perfil", body.getUsuario().getPerfil())
+                                .putInt("id_usuario", body.getUsuario().getId())
+                                .apply();
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                });
     }
 }

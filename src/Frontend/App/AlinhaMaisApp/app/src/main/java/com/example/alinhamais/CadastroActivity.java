@@ -18,7 +18,7 @@ import retrofit2.Response;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    private EditText nomeEdit, emailEdit, senhaEdit, repitaSenhaEdit;
+    private EditText nomeEdit, emailEdit, telefoneEdit, dataNascimentoEdit, senhaEdit, repitaSenhaEdit;
     private Button cadastrarButton, voltarButton;
 
     @Override
@@ -28,6 +28,8 @@ public class CadastroActivity extends AppCompatActivity {
 
         nomeEdit       = findViewById(R.id.nomeEdit);
         emailEdit      = findViewById(R.id.emailEdit);
+        telefoneEdit = findViewById(R.id.telefoneEdit);
+        dataNascimentoEdit = findViewById(R.id.dataNascimentoEdit);
         senhaEdit      = findViewById(R.id.senhaEdit);
         repitaSenhaEdit = findViewById(R.id.repitaSenhaEdit);
         cadastrarButton = findViewById(R.id.cadastrarButton);
@@ -43,11 +45,13 @@ public class CadastroActivity extends AppCompatActivity {
     private void fazerCadastro() {
         String nome   = nomeEdit.getText().toString().trim();
         String email  = emailEdit.getText().toString().trim();
+        String telefone = telefoneEdit.getText().toString().trim();
+        String dataNascimento = dataNascimentoEdit.getText().toString().trim();
         String senha  = senhaEdit.getText().toString().trim();
         String repita = repitaSenhaEdit.getText().toString().trim();
 
         // Validações
-        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty() || dataNascimento.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -59,7 +63,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         cadastrarButton.setEnabled(false);
 
-        CadastroRequest request = new CadastroRequest(nome, email, senha);
+        CadastroRequest request = new CadastroRequest(nome, email, senha, telefone, dataNascimento);
 
         RetrofitClient.getApiService().registro(request).enqueue(new Callback<LoginResponse>() {
 
