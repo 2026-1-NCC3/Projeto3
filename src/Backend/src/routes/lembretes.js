@@ -227,6 +227,57 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// PUT /lembretes/:id/upload — Atualiza com nova foto
+router.put("/:id/upload", upload.single("foto"), async (req, res) => {
+  try {
+    const db = getDb();
+    const { id } = req.params;
+    const {
+      titulo,
+      descricao,
+      intervalo_minutos,
+      horario_inicio,
+      horario_fim,
+      pacientes,
+    } = req.body;
+
+    const foto = req.file ? `/uploads/${req.file.filename}` : null;
+
+    if (foto) {
+      await db.sql`
+        UPDATE Lembrete
+        SET titulo = ${titulo}, descricao = ${descricao},
+            foto = ${foto}, intervalo_minutos = ${intervalo_minutos},
+            horario_inicio = ${horario_inicio}, horario_fim = ${horario_fim}
+        WHERE id_lembrete = ${id}
+      `;
+    } else {
+      await db.sql`
+        UPDATE Lembrete
+        SET titulo = ${titulo}, descricao = ${descricao},
+            intervalo_minutos = ${intervalo_minutos},
+            horario_inicio = ${horario_inicio}, horario_fim = ${horario_fim}
+        WHERE id_lembrete = ${id}
+      `;
+    }
+
+    if (pacientes) {
+      const listaPacientes = JSON.parse(pacientes);
+      await db.sql`DELETE FROM Lembrete_Paciente WHERE id_lembrete = ${id}`;
+      for (const id_paciente of listaPacientes) {
+        await db.sql`
+          INSERT INTO Lembrete_Paciente (id_lembrete, id_paciente, ativo)
+          VALUES (${id}, ${id_paciente}, 1)
+        `;
+      }
+    }
+
+    res.json({ mensagem: "Lembrete atualizado com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
 // PATCH /lembretes/:id_lembrete/paciente/:id_paciente — Ativa/desativa
 router.patch("/:id_lembrete/paciente/:id_paciente", async (req, res) => {
   try {

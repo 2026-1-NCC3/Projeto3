@@ -76,7 +76,11 @@ export default function Lembretes() {
     setMostrarForm(true);
   }
 
-  function abrirEdicao(l) {
+  async function abrirEdicao(l) {
+    // Busca pacientes já vinculados ao lembrete
+    const res = await api.get(`/lembretes/${l.id_lembrete}`);
+    const vinculados = res.data.pacientes?.map((p) => p.id_usuario) || [];
+
     setEditando(l.id_lembrete);
     setForm({
       titulo: l.titulo,
@@ -84,7 +88,7 @@ export default function Lembretes() {
       intervalo_minutos: l.intervalo_minutos || 60,
       horario_inicio: l.horario_inicio || "08:00",
       horario_fim: l.horario_fim || "18:00",
-      pacientes: l.pacientes?.map((p) => p.id_usuario) || [],
+      pacientes: vinculados,
       foto: null,
     });
     setPreview(l.foto ? `${process.env.REACT_APP_API_URL}${l.foto}` : null);
@@ -93,17 +97,31 @@ export default function Lembretes() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     try {
       if (editando) {
-        await api.put(`/lembretes/${editando}`, {
-          titulo: form.titulo,
-          descricao: form.descricao,
-          intervalo_minutos: form.intervalo_minutos,
-          horario_inicio: form.horario_inicio,
-          horario_fim: form.horario_fim,
-          pacientes: form.pacientes,
-        });
+        // Se tiver nova foto, envia como multipart
+        if (form.foto) {
+          const data = new FormData();
+          data.append("foto", form.foto);
+          data.append("titulo", form.titulo);
+          data.append("descricao", form.descricao);
+          data.append("intervalo_minutos", form.intervalo_minutos);
+          data.append("horario_inicio", form.horario_inicio);
+          data.append("horario_fim", form.horario_fim);
+          data.append("pacientes", JSON.stringify(form.pacientes));
+          await api.put(`/lembretes/${editando}/upload`, data, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+        } else {
+          await api.put(`/lembretes/${editando}`, {
+            titulo: form.titulo,
+            descricao: form.descricao,
+            intervalo_minutos: form.intervalo_minutos,
+            horario_inicio: form.horario_inicio,
+            horario_fim: form.horario_fim,
+            pacientes: form.pacientes,
+          });
+        }
       } else {
         if (form.foto) {
           const data = new FormData();
@@ -130,7 +148,6 @@ export default function Lembretes() {
           });
         }
       }
-
       setMostrarForm(false);
       carregarDados();
     } catch (err) {
@@ -270,32 +287,36 @@ export default function Lembretes() {
               </div>
 
               {/* Foto */}
-              {!editando && (
-                <div className="campo" style={{ gridColumn: "1 / -1" }}>
-                  <label>Foto (opcional)</label>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "16px",
-                    }}
+              <div className="campo" style={{ gridColumn: "1 / -1" }}>
+                <label>
+                  {editando ? "Trocar Foto (opcional)" : "Foto (opcional)"}
+                </label>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
+                >
+                  <button
+                    type="button"
+                    className="btn-ghost"
+                    style={{ padding: "8px 16px", whiteSpace: "nowrap" }}
+                    onClick={() => fileRef.current.click()}
                   >
-                    <button
-                      type="button"
-                      className="btn-ghost"
-                      style={{ padding: "8px 16px", whiteSpace: "nowrap" }}
-                      onClick={() => fileRef.current.click()}
+                    {preview ? "Trocar Foto" : "Selecionar Foto"}
+                  </button>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleFoto}
+                  />
+                  {preview ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
                     >
-                      Selecionar Foto
-                    </button>
-                    <input
-                      ref={fileRef}
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleFoto}
-                    />
-                    {preview && (
                       <img
                         src={preview}
                         alt="preview"
@@ -306,28 +327,51 @@ export default function Lembretes() {
                           borderRadius: "8px",
                         }}
                       />
-                    )}
-                    {!preview && (
-                      <span
-                        style={{
-                          fontSize: "13px",
-                          color: "var(--texto-claro)",
+                      <button
+                        type="button"
+                        className="btn-perigo"
+                        style={{ padding: "4px 10px", fontSize: "12px" }}
+                        onClick={() => {
+                          setPreview(null);
+                          setForm({ ...form, foto: null });
+                          fileRef.current.value = "";
                         }}
                       >
-                        Nenhuma foto selecionada
-                      </span>
-                    )}
-                  </div>
+                        Remover
+                      </button>
+                    </div>
+                  ) : (
+                    <span
+                      style={{ fontSize: "13px", color: "var(--texto-claro)" }}
+                    >
+                      Nenhuma foto selecionada
+                    </span>
+                  )}
                 </div>
-              )}
+              </div>
 
               {/* Pacientes */}
               <div className="campo" style={{ gridColumn: "1 / -1" }}>
-                <label>Pacientes que receberão este lembrete</label>
+                <label>
+                  Pacientes que receberão este lembrete
+                  {form.pacientes.length > 0 && (
+                    <span
+                      style={{
+                        marginLeft: "8px",
+                        color: "var(--primaria)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      ({form.pacientes.length} selecionado
+                      {form.pacientes.length > 1 ? "s" : ""})
+                    </span>
+                  )}
+                </label>
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(180px, 1fr))",
                     gap: "8px",
                     marginTop: "8px",
                   }}
@@ -338,24 +382,31 @@ export default function Lembretes() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "8px",
-                        padding: "8px 12px",
+                        gap: "10px",
+                        padding: "10px 14px",
                         background: form.pacientes.includes(p.id_usuario)
                           ? "#e6f7f8"
                           : "var(--fundo)",
                         border: form.pacientes.includes(p.id_usuario)
-                          ? "1px solid var(--primaria)"
+                          ? "1.5px solid var(--primaria)"
                           : "1px solid var(--borda)",
                         borderRadius: "8px",
                         cursor: "pointer",
                         fontWeight: "normal",
                         color: "var(--texto)",
+                        fontSize: "14px",
+                        userSelect: "none",
                       }}
                     >
                       <input
                         type="checkbox"
                         checked={form.pacientes.includes(p.id_usuario)}
                         onChange={() => togglePaciente(p.id_usuario)}
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          cursor: "pointer",
+                        }}
                       />
                       {p.nome}
                     </label>
@@ -381,43 +432,42 @@ export default function Lembretes() {
       )}
 
       {/* Lista */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "16px",
-        }}
-      >
-        {carregando ? (
-          <p style={{ color: "var(--texto-claro)" }}>Carregando...</p>
-        ) : lembretes.length === 0 ? (
-          <p style={{ color: "var(--texto-claro)" }}>
-            Nenhum lembrete cadastrado.
-          </p>
-        ) : (
-          lembretes.map((l) => (
+      {carregando ? (
+        <p style={{ color: "var(--texto-claro)" }}>Carregando...</p>
+      ) : lembretes.length === 0 ? (
+        <p style={{ color: "var(--texto-claro)" }}>
+          Nenhum lembrete cadastrado.
+        </p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {lembretes.map((l) => (
             <div
               key={l.id_lembrete}
               className="card"
               style={{ padding: "0", overflow: "hidden" }}
             >
-              {/* Foto */}
               {l.foto ? (
                 <img
                   src={`${process.env.REACT_APP_API_URL}${l.foto}`}
                   alt={l.titulo}
-                  style={{ width: "100%", height: "160px", objectFit: "cover" }}
+                  style={{ width: "100%", height: "180px", objectFit: "cover" }}
                 />
               ) : (
                 <div
                   style={{
                     width: "100%",
-                    height: "160px",
-                    background: "var(--fundo)",
+                    height: "180px",
+                    background: "linear-gradient(135deg, #e6f7f8, #b2ebf2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "40px",
+                    fontSize: "48px",
                   }}
                 >
                   🔔
@@ -441,6 +491,7 @@ export default function Lembretes() {
                       fontSize: "13px",
                       color: "var(--texto-claro)",
                       marginBottom: "12px",
+                      lineHeight: "1.4",
                     }}
                   >
                     {l.descricao}
@@ -452,16 +503,17 @@ export default function Lembretes() {
                     display: "flex",
                     gap: "8px",
                     flexWrap: "wrap",
-                    marginBottom: "12px",
+                    marginBottom: "16px",
                   }}
                 >
                   <span
                     style={{
                       background: "#e6f7f8",
                       color: "var(--primaria)",
-                      padding: "2px 10px",
+                      padding: "3px 10px",
                       borderRadius: "999px",
                       fontSize: "12px",
+                      fontWeight: 600,
                     }}
                   >
                     ⏱ {formatarIntervalo(l.intervalo_minutos)}
@@ -471,12 +523,12 @@ export default function Lembretes() {
                       style={{
                         background: "var(--fundo)",
                         color: "var(--texto-claro)",
-                        padding: "2px 10px",
+                        padding: "3px 10px",
                         borderRadius: "999px",
                         fontSize: "12px",
                       }}
                     >
-                      {l.horario_inicio} — {l.horario_fim}
+                      🕐 {l.horario_inicio} — {l.horario_fim}
                     </span>
                   )}
                 </div>
@@ -484,14 +536,14 @@ export default function Lembretes() {
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button
                     className="btn-ghost"
-                    style={{ flex: 1, padding: "6px", fontSize: "12px" }}
+                    style={{ flex: 1, padding: "8px", fontSize: "13px" }}
                     onClick={() => abrirEdicao(l)}
                   >
                     Editar
                   </button>
                   <button
                     className="btn-perigo"
-                    style={{ flex: 1, padding: "6px", fontSize: "12px" }}
+                    style={{ flex: 1, padding: "8px", fontSize: "13px" }}
                     onClick={() => deletar(l.id_lembrete)}
                   >
                     Deletar
@@ -499,9 +551,9 @@ export default function Lembretes() {
                 </div>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
