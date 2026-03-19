@@ -1,17 +1,16 @@
 const express = require("express");
 const { connectDatabase } = require("./database/db");
-const { autenticar, apenasAdmin } = require("./middlewares/auth.js");
+const { autenticar, apenasAdmin } = require("./middlewares/auth");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const cors = require("cors");
 
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://alinha-mais.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
@@ -23,8 +22,7 @@ app.use("/uploads", express.static("src/uploads"));
 const { router: authRoutes } = require("./routes/auth.js");
 const usuariosRoutes = require("./routes/usuario.js");
 const pacientesRoutes = require("./routes/pacientes.js");
-const exerciciosRoutes = require("./routes/exercicios.js");
-const planosRoutes = require("./routes/planos.js");
+const lembretesRoutes = require("./routes/lembretes.js");
 const execucoesRoutes = require("./routes/execucoes.js");
 const notificacoesRoutes = require("./routes/notificacoes.js");
 const postagensRoutes = require("./routes/postagens.js");
@@ -38,28 +36,19 @@ app.use("/auth", authRoutes);
 // Rotas autenticadas
 app.use("/execucoes", autenticar, execucoesRoutes);
 app.use("/notificacoes", autenticar, notificacoesRoutes);
-app.use("/planos", autenticar, planosRoutes);
 app.use("/postagens", autenticar, postagensRoutes);
 app.use("/consultas", autenticar, consultasRoutes);
+app.use("/lembretes", autenticar, lembretesRoutes);
 
 // Rotas apenas admin
 app.use("/usuarios", autenticar, apenasAdmin, usuariosRoutes);
 app.use("/pacientes", autenticar, apenasAdmin, pacientesRoutes);
-app.use("/exercicios", autenticar, apenasAdmin, exerciciosRoutes);
 app.use("/arquivos", autenticar, apenasAdmin, arquivosRoutes);
 app.use("/sessoes", autenticar, apenasAdmin, sessoesRoutes);
 
 // Health check
-app.get("/health", async (req, res) => {
-  res.json({ status: "ok" });
-});
-
 app.get("/", (req, res) => {
-  res.json({
-    status: "online",
-    mensagem: "API Maya RPG funcionando!",
-    versao: "1.0.0",
-  });
+  res.json({ status: "online", mensagem: "API Maya RPG funcionando!" });
 });
 
 async function startServer() {
