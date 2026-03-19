@@ -23,6 +23,7 @@ export default function PacienteForm() {
 
   useEffect(() => {
     if (editando) carregarPaciente();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function carregarPaciente() {

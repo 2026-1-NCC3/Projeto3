@@ -20,6 +20,7 @@ export default function Prontuario() {
 
   useEffect(() => {
     carregarDados();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function carregarDados() {
