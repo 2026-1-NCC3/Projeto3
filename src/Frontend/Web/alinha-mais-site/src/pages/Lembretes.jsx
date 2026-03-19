@@ -8,6 +8,7 @@ export default function Lembretes() {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [editando, setEditando] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [fotoRemovida, setFotoRemovida] = useState(false);
   const fileRef = useRef();
   const id_admin = localStorage.getItem("id_usuario");
 
@@ -120,6 +121,7 @@ export default function Lembretes() {
             horario_inicio: form.horario_inicio,
             horario_fim: form.horario_fim,
             pacientes: form.pacientes,
+            remover_foto: fotoRemovida,
           });
         }
       } else {
@@ -150,6 +152,7 @@ export default function Lembretes() {
       }
       setMostrarForm(false);
       carregarDados();
+      setFotoRemovida(false);
     } catch (err) {
       alert("Erro ao salvar lembrete");
     }
@@ -334,6 +337,7 @@ export default function Lembretes() {
                         onClick={() => {
                           setPreview(null);
                           setForm({ ...form, foto: null });
+                          setFotoRemovida(true);
                           fileRef.current.value = "";
                         }}
                       >

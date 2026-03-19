@@ -199,18 +199,30 @@ router.put("/:id", async (req, res) => {
       horario_inicio,
       horario_fim,
       pacientes,
+      remover_foto,
     } = req.body;
 
-    await db.sql`
-      UPDATE Lembrete
-      SET titulo = ${titulo}, descricao = ${descricao},
-          intervalo_minutos = ${intervalo_minutos},
-          horario_inicio = ${horario_inicio},
-          horario_fim = ${horario_fim}
-      WHERE id_lembrete = ${id}
-    `;
+    if (remover_foto) {
+      await db.sql`
+        UPDATE Lembrete
+        SET titulo = ${titulo}, descricao = ${descricao},
+            foto = NULL,
+            intervalo_minutos = ${intervalo_minutos},
+            horario_inicio = ${horario_inicio},
+            horario_fim = ${horario_fim}
+        WHERE id_lembrete = ${id}
+      `;
+    } else {
+      await db.sql`
+        UPDATE Lembrete
+        SET titulo = ${titulo}, descricao = ${descricao},
+            intervalo_minutos = ${intervalo_minutos},
+            horario_inicio = ${horario_inicio},
+            horario_fim = ${horario_fim}
+        WHERE id_lembrete = ${id}
+      `;
+    }
 
-    // Se vieram novos pacientes, substitui os anteriores
     if (pacientes && pacientes.length > 0) {
       await db.sql`DELETE FROM Lembrete_Paciente WHERE id_lembrete = ${id}`;
       for (const id_paciente of pacientes) {

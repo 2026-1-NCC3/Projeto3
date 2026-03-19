@@ -129,9 +129,9 @@ router.post("/", async (req, res) => {
 
     // Insere na tabela Usuario
     await db.sql`
-      INSERT INTO Usuario (nome, email, id_login)
-      VALUES (${nome}, ${email}, ${id_login})
-    `;
+      INSERT INTO Usuario (nome, email, id_login, cpf)
+      VALUES (${nome}, ${email}, ${id_login}, ${cpf})
+`;
 
     const resultado = await db.sql`
       SELECT id_usuario FROM Usuario WHERE id_login = ${id_login}
