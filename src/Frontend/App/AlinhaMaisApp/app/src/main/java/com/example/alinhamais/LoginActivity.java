@@ -20,48 +20,47 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText loginEdit, senhaEdit;
-    private Button loginButton, cadastrarButton;
+    private EditText cpfEdit, idLoginEdit;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginEdit       = findViewById(R.id.loginEdit);
-        senhaEdit       = findViewById(R.id.senhaEdit);
-        loginButton     = findViewById(R.id.loginButton);
-        cadastrarButton = findViewById(R.id.cadastrarButton);
+        cpfEdit      = findViewById(R.id.cpfEdit);
+        idLoginEdit  = findViewById(R.id.idLoginEdit);
+        loginButton  = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(v -> fazerLogin());
-
-        cadastrarButton.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, CadastroActivity.class)));
     }
 
     private void fazerLogin() {
-        String email = loginEdit.getText().toString().trim();
-        String senha = senhaEdit.getText().toString().trim();
+        String cpf      = cpfEdit.getText().toString().trim();
+        String id_login = idLoginEdit.getText().toString().trim();
 
-        if (email.isEmpty() || senha.isEmpty()) {
-            Toast.makeText(this, "Preencha email e senha!", Toast.LENGTH_SHORT).show();
+        if (cpf.isEmpty() || id_login.isEmpty()) {
+            Toast.makeText(this, "Preencha CPF e código de acesso!",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         loginButton.setEnabled(false);
 
-        RetrofitClient.getApiService().login(new LoginRequest(email, senha))
+        RetrofitClient.getApiService()
+                .login(new LoginRequest(cpf, id_login))
                 .enqueue(new Callback<LoginResponse>() {
 
                     @Override
-                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    public void onResponse(Call<LoginResponse> call,
+                                           Response<LoginResponse> response) {
                         loginButton.setEnabled(true);
 
                         if (response.isSuccessful() && response.body() != null) {
                             salvarDadosEIrParaMain(response.body());
                         } else {
                             Toast.makeText(LoginActivity.this,
-                                    "Email ou senha inválidos",
+                                    "CPF ou código inválidos",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -79,14 +78,15 @@ public class LoginActivity extends AppCompatActivity {
     private void salvarDadosEIrParaMain(LoginResponse body) {
         String token = body.getToken();
 
-        // Busca dados completos (telefone, data nascimento) via /auth/me
         RetrofitClient.getApiService()
                 .getMe("Bearer " + token)
                 .enqueue(new Callback<MeResponse>() {
 
                     @Override
-                    public void onResponse(Call<MeResponse> call, Response<MeResponse> response) {
-                        SharedPreferences.Editor editor = getSharedPreferences("MayaPrefs", MODE_PRIVATE).edit();
+                    public void onResponse(Call<MeResponse> call,
+                                           Response<MeResponse> response) {
+                        SharedPreferences.Editor editor = getSharedPreferences(
+                                "MayaPrefs", MODE_PRIVATE).edit();
 
                         editor.putString("token", token);
                         editor.putString("nome", body.getUsuario().getNome());
@@ -94,11 +94,14 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("perfil", body.getUsuario().getPerfil());
                         editor.putInt("id_usuario", body.getUsuario().getId());
 
-                        // Salva telefone e data se /me retornou OK
                         if (response.isSuccessful() && response.body() != null) {
                             MeResponse me = response.body();
-                            editor.putString("telefone", me.getTelefone() != null ? me.getTelefone() : "");
-                            editor.putString("data_nascimento", me.getDataNascimento() != null ? me.getDataNascimento() : "");
+                            editor.putString("telefone",
+                                    me.getTelefone() != null ? me.getTelefone() : "");
+                            editor.putString("data_nascimento",
+                                    me.getDataNascimento() != null ? me.getDataNascimento() : "");
+                            editor.putString("id_login",
+                                    me.getIdLogin() != null ? me.getIdLogin() : "");
                         }
 
                         editor.apply();
@@ -108,13 +111,13 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(Call<MeResponse> call, Throwable t) {
-                        // Se /me falhar, loga com dados básicos mesmo
                         getSharedPreferences("MayaPrefs", MODE_PRIVATE).edit()
                                 .putString("token", token)
                                 .putString("nome", body.getUsuario().getNome())
@@ -124,7 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                                 .apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     }
                 });

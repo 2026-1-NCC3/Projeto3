@@ -55,6 +55,7 @@ select {
   background: var(--branco);
   outline: none;
   transition: border 0.2s;
+  resize: vertical;
 }
 
 input:focus,

@@ -1,11 +1,11 @@
 package com.example.alinhamais.models;
 
 public class LoginRequest {
-    private String email;
-    private String senha;
+    private String cpf;
+    private String id_login;
 
-    public LoginRequest(String email, String senha) {
-        this.email = email;
-        this.senha = senha;
+    public LoginRequest(String cpf, String id_login) {
+        this.cpf      = cpf;
+        this.id_login = id_login;
     }
 }

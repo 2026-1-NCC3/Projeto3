@@ -21,28 +21,26 @@ public class PerfilFragment extends Fragment {
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("MayaPrefs", requireActivity().MODE_PRIVATE);
 
-        String nome            = prefs.getString("nome", "Usuário");
-        String email           = prefs.getString("email", "");
-        String telefone        = prefs.getString("telefone", "Não informado");
-        String dataNascimento  = prefs.getString("data_nascimento", "Não informada");
-        int    id              = prefs.getInt("id_usuario", 0);
+        String nome           = prefs.getString("nome", "Usuário");
+        String email          = prefs.getString("email", "");
+        String telefone       = prefs.getString("telefone", "Não informado");
+        String dataNascimento = prefs.getString("data_nascimento", "Não informada");
+        String idLogin        = prefs.getString("id_login", "");
+        int    id             = prefs.getInt("id_usuario", 0);
 
-        TextView tvNome           = view.findViewById(R.id.tvNome);
-        TextView tvId             = view.findViewById(R.id.tvId);
-        TextView tvEmail          = view.findViewById(R.id.tvEmail);
-        TextView tvTelefone       = view.findViewById(R.id.tvTelefone);
-        TextView tvDataNascimento = view.findViewById(R.id.tvDataNascimento);
+        view.<TextView>findViewById(R.id.tvNome).setText(nome);
+        view.<TextView>findViewById(R.id.tvId).setText("ID: " + id);
+        view.<TextView>findViewById(R.id.tvEmail).setText("Email: " + email);
+        view.<TextView>findViewById(R.id.tvTelefone).setText("Telefone: " + telefone);
+        view.<TextView>findViewById(R.id.tvDataNascimento).setText("Nascimento: " + dataNascimento);
 
-        tvNome.setText(nome);
-        tvId.setText("ID: " + id);
-        tvEmail.setText("Email: " + email);
-        tvTelefone.setText("Telefone: " + telefone);
-        tvDataNascimento.setText("Nascimento: " + dataNascimento);
+        // Mostra o código de acesso se existir
+        TextView tvIdLogin = view.findViewById(R.id.tvIdLogin);
+        if (tvIdLogin != null) {
+            tvIdLogin.setText("Código de Acesso: " + idLogin);
+        }
 
-        Button btnAlterarSenha = view.findViewById(R.id.btnAlterarSenha);
-        btnAlterarSenha.setOnClickListener(v ->
-                startActivity(new Intent(requireActivity(), AlterarSenhaActivity.class)));
-
+        // Botão Logout
         Button btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
             prefs.edit().clear().apply();

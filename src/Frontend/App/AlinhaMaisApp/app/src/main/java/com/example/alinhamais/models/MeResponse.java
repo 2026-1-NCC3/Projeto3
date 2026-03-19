@@ -8,6 +8,7 @@ public class MeResponse {
     private String email;
     private String perfil;
     private String telefone;
+    private String id_login;
 
     @SerializedName("data_nascimento")
     private String dataNascimento;
@@ -17,5 +18,6 @@ public class MeResponse {
     public String getEmail()          { return email; }
     public String getPerfil()         { return perfil; }
     public String getTelefone()       { return telefone; }
+    public String getIdLogin()        { return id_login; }
     public String getDataNascimento() { return dataNascimento; }
 }

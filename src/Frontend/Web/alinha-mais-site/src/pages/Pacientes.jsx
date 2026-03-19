@@ -80,6 +80,7 @@ export default function Pacientes() {
                   "Nome",
                   "CPF",
                   "Telefone",
+                  "Código",
                   "Status",
                   "Consultas Pagas",
                   "Ações",
@@ -116,6 +117,19 @@ export default function Pacientes() {
                     style={{ padding: "12px 8px", color: "var(--texto-claro)" }}
                   >
                     {p.telefone}
+                  </td>
+                  <td style={{ padding: "12px 8px" }}>
+                    <span
+                      style={{
+                        fontFamily: "monospace",
+                        fontWeight: 700,
+                        fontSize: "15px",
+                        color: "var(--primaria)",
+                        letterSpacing: "3px",
+                      }}
+                    >
+                      {p.id_login}
+                    </span>
                   </td>
                   <td style={{ padding: "12px 8px" }}>
                     <span

@@ -2,6 +2,105 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 
+// Componente do Modal
+function ModalCodigoAcesso({ idLogin, nome, onFechar }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 999,
+      }}
+    >
+      <div
+        style={{
+          background: "white",
+          borderRadius: "16px",
+          padding: "40px",
+          maxWidth: "420px",
+          width: "90%",
+          textAlign: "center",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+        }}
+      >
+        <div
+          style={{
+            width: "64px",
+            height: "64px",
+            borderRadius: "50%",
+            background: "#e6f7f8",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px",
+          }}
+        >
+          <span style={{ fontSize: "32px" }}>✓</span>
+        </div>
+
+        <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "8px" }}>
+          Paciente Cadastrado!
+        </h2>
+
+        <p style={{ color: "var(--texto-claro)", marginBottom: "24px" }}>
+          Informe o código abaixo para <strong>{nome}</strong> acessar o app:
+        </p>
+
+        <div
+          style={{
+            background: "var(--fundo)",
+            borderRadius: "12px",
+            padding: "20px",
+            marginBottom: "24px",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "13px",
+              color: "var(--texto-claro)",
+              marginBottom: "8px",
+            }}
+          >
+            Código de Acesso
+          </p>
+          <p
+            style={{
+              fontSize: "36px",
+              fontWeight: 800,
+              letterSpacing: "8px",
+              color: "var(--primaria)",
+              fontFamily: "monospace",
+            }}
+          >
+            {idLogin}
+          </p>
+          <p
+            style={{
+              fontSize: "12px",
+              color: "var(--texto-claro)",
+              marginTop: "8px",
+            }}
+          >
+            CPF + este código para entrar no app
+          </p>
+        </div>
+
+        <button
+          className="btn-primario"
+          onClick={onFechar}
+          style={{ width: "100%", padding: "14px", fontSize: "16px" }}
+        >
+          OK, entendido!
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function PacienteForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,9 +115,8 @@ export default function PacienteForm() {
     observacoes: "",
     consultas_pagas: 0,
   });
-  const [idLoginGerado, setIdLoginGerado] = useState("");
+  const [modal, setModal] = useState({ visivel: false, idLogin: "", nome: "" });
   const [erro, setErro] = useState("");
-  const [sucesso, setSucesso] = useState("");
   const [carregando, setCarregando] = useState(false);
 
   useEffect(() => {
@@ -51,19 +149,20 @@ export default function PacienteForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     setErro("");
-    setSucesso("");
     setCarregando(true);
 
     try {
       if (editando) {
         await api.put(`/pacientes/${id}`, form);
-        setSucesso("Paciente atualizado com sucesso!");
+        navigate("/pacientes");
       } else {
         const res = await api.post("/pacientes", form);
-        setIdLoginGerado(res.data.id_login);
-        setSucesso(
-          `Paciente cadastrado! Código de acesso: ${res.data.id_login}`,
-        );
+        // Abre o modal com o código gerado
+        setModal({
+          visivel: true,
+          idLogin: res.data.id_login,
+          nome: form.nome,
+        });
       }
     } catch (err) {
       if (err.response?.status === 409) {
@@ -78,6 +177,15 @@ export default function PacienteForm() {
 
   return (
     <div style={{ maxWidth: "640px" }}>
+      {/* Modal de código de acesso */}
+      {modal.visivel && (
+        <ModalCodigoAcesso
+          idLogin={modal.idLogin}
+          nome={modal.nome}
+          onFechar={() => navigate("/pacientes")}
+        />
+      )}
+
       <div
         style={{
           display: "flex",
@@ -182,39 +290,6 @@ export default function PacienteForm() {
           </div>
 
           {erro && <p className="erro-msg">{erro}</p>}
-
-          {sucesso && (
-            <div
-              style={{
-                background: "#f0fff4",
-                border: "1px solid var(--sucesso)",
-                borderRadius: "8px",
-                padding: "16px",
-                marginTop: "8px",
-              }}
-            >
-              <p className="sucesso-msg" style={{ margin: 0 }}>
-                {sucesso}
-              </p>
-              {idLoginGerado && (
-                <div style={{ marginTop: "12px" }}>
-                  <p style={{ fontSize: "13px", color: "var(--texto-claro)" }}>
-                    Informe ao paciente para acessar o app:
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 700,
-                      color: "var(--primaria)",
-                      letterSpacing: "4px",
-                    }}
-                  >
-                    {idLoginGerado}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
 
           <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
             <button

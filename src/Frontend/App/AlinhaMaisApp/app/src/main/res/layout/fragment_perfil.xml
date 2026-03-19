@@ -126,18 +126,29 @@
 
                 </LinearLayout>
 
+                <!-- Código de Acesso -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/tvIdLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="Código de Acesso: "/>
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Botão Alterar Senha -->
-        <Button
-            android:id="@+id/btnAlterarSenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Alterar Senha"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/secundariaClaro"/>
+
 
         <!-- Botão Logout -->
         <Button
