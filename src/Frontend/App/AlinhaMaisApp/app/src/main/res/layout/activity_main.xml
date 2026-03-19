@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/exercicioButton"
                 android:icon="@drawable/exercicio"
-                android:text="Exercicios"
+                android:text="Lembretes"
                 />
 
             <com.google.android.material.tabs.TabItem
