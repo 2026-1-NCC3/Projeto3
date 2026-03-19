@@ -9,15 +9,19 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/background_cor"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    >
 
+    <!--Imagem logo -->
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/logo_e_bg"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/logo_alinha_ImgD"/>
 
+    <!--Card com inputs e botões -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,32 +40,35 @@
             android:gravity="center_horizontal"
             android:padding="24dp">
 
+            <!--Input CPF -->
             <EditText
                 style="@style/Input"
                 android:id="@+id/cpfEdit"
                 android:background="@drawable/custom_round_square"
-                android:drawableLeft="@drawable/pessoa"
-                android:hint="CPF"
+                android:drawableStart="@drawable/pessoa"
+                android:hint="@string/cpf_Hin"
                 android:inputType="number"
                 android:maxLines="1"
                 android:imeOptions="actionNext"/>
 
+            <!-- Input Codigo de acesso-->
             <EditText
                 style="@style/Input"
                 android:id="@+id/idLoginEdit"
-                android:drawableLeft="@drawable/chave"
-                android:hint="Código de Acesso"
+                android:drawableStart="@drawable/chave"
+                android:hint="@string/codigo_de_acesso_Hin"
                 android:inputType="number"
                 android:maxLines="1"
                 android:imeOptions="actionDone"
                 android:layout_marginTop="20dp"/>
 
+            <!-- Botão Entrar-->
             <Button
                 style="@style/ButtonColor"
                 android:id="@+id/loginButton"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/secundariaEscuro"
-                android:text="Entrar"/>
+                android:text="@string/entrar_Btn"/>
 
         </LinearLayout>
 

@@ -45,9 +45,29 @@
     </style>
 
     <style name="Small_ImageView">
-        <item name="android:layout_width">45dp</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_width">30sp</item>
+        <item name="android:layout_height">30sp</item>
 
     </style>
+
+    <style name="TextRegular">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextBold">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextLight">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        </style>
+
+
 
 </resources>

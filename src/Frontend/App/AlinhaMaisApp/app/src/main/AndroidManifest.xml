@@ -14,7 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AlinhaMais">
+        android:theme="@style/Theme.AlinhaMais"
+        >
         <activity
             android:name=".SplashActivity"
             android:exported="true">

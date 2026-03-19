@@ -3,8 +3,7 @@
     <style name="Base.Theme.AlinhaMais" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primariaClaro</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowNoTitle">true</item>
+
     </style>
 
 

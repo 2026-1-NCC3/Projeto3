@@ -70,17 +70,6 @@ public class MainActivity extends BaseActivity {
 
         });
 
-       /* ImageButton notificacaoBt = findViewById(R.id.notificacaoButton);
-        notificacaoBt.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, NotificacaoActivity.class);
-            startActivity(i);
-        });
-
-        ImageButton perfilBt = findViewById(R.id.perfilButton);
-        perfilBt.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, PerfilActivity.class);
-            startActivity(i);
-        });*/
 
 
 

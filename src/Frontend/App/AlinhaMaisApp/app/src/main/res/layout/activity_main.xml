@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_main"
@@ -21,37 +20,40 @@
             app:tabIndicatorColor="@color/primariaClaro"
             app:tabSelectedTextColor="@color/primariaClaro"
             >
-
+            <!-- Tab exercicios -->
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/exercicioButton"
                 android:icon="@drawable/exercicio"
-                android:text="Lembretes"
+                android:text="@string/exercicios_Tab"
                 />
 
+            <!-- Tab Notificacao-->
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/notificacaoTab"
                 android:icon="@drawable/sem_notificacao"
-                android:text="Notificação"
+                android:text="@string/notificao_Tab"
                 />
 
+            <!-- Tab Perfil -->
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/perfilTab"
-                android:icon="@drawable/usuario_placeholder"
-                android:text="Perfil"
+                android:icon="@drawable/perfil"
+                android:text="@string/perfil_Tab"
                 />
 
+            <!-- Tab Mais -->
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/moreTab"
                 android:icon="@drawable/elipse"
-                android:text="Mais"
+                android:text="@string/mais_Tab"
                 />
 
         </com.google.android.material.tabs.TabLayout>
@@ -63,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/custom_corners_top"
         android:backgroundTint="@color/bgTransparente">
 

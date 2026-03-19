@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,10 +13,11 @@
 
         <!-- Foto placeholder -->
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@drawable/usuario_placeholder"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/foto_de_perfil_ImgD"/>
 
         <!-- Nome -->
         <TextView
@@ -23,8 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="NOME"/>
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/nome_PH"/>
 
         <!-- ID -->
         <TextView
@@ -32,8 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
+            android:fontFamily="@font/roboto_light"
             android:layout_marginBottom="16dp"
-            android:text="ID:123456789"/>
+            android:text="@string/id_PH"/>
 
         <!-- Card com email e telefone -->
         <androidx.cardview.widget.CardView
@@ -64,14 +67,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="14sp"
-                        android:text="Email: "/>
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/email_PH"/>
 
                     <ImageButton
                         android:id="@+id/btnEditEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@android:drawable/ic_menu_edit"/>
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="@string/botao_editar_ImgD"/>
 
                 </LinearLayout>
 
@@ -88,7 +93,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="14sp"
-                        android:text="Telefone: "/>
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/telefone_PH"/>
 
 
                     <ImageButton
@@ -96,7 +102,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@android:drawable/ic_menu_edit"/>
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="@string/botao_editar_ImgD"
+                    />
 
                 </LinearLayout>
 
@@ -115,14 +123,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="14sp"
-                        android:text="Nascimento: "/>
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/nascimento_PH"/>
 
                     <ImageButton
                         android:id="@+id/btnEditDataNascimento"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@android:drawable/ic_menu_edit"/>
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="@string/botao_editar_ImgD"/>
 
                 </LinearLayout>
 
@@ -139,7 +149,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:text="Código de Acesso: "/>
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/codigo_de_acesso_PH"/>
 
 
                 </LinearLayout>
@@ -155,8 +166,10 @@
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sair"
-            android:backgroundTint="@color/secundariaClaro"/>
+            android:text="@string/sair_Btn"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/secundariaEscuro"/>
 
     </LinearLayout>
 

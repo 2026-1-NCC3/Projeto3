@@ -13,5 +13,7 @@
     <color name="Hint">#7F0F194B</color>
     <color name="backgroundSplash">#3EBAD2</color>
     <color name="bgTransparente">#88FFFFFF</color>
+    <color name="wb">#FFFFFFFF</color>
+    <color name="bw">#FF000000</color>
 
 </resources>

@@ -1,5 +1,56 @@
 <resources>
+    <!--
+
+     Botoes: _Btn
+     Tabs: ...Tab
+     Descrição de Imagem: _ImgD
+     Texto Bold: _Bold
+     Texto Light: _Light
+     Texto Normal: texto_
+     Textos Placeholder: _PH
+     Hint: _Hin
+
+     -->
+
+    <!--Textos gerais/main -->
     <string name="app_name">Alinha+</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!--Texto Padrão -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Strings do fragment More -->
+    <string name="Sobre_Bold">Sobre nós</string>
+    <string name="texto_sobre">Sou fisioterapeuta formada pela USP em 1999.\nAcredito que as pessoas podem viver sem dores.\nO corpo “fala” quando sente dor, desconforto.\nEntender o que ele fala ajuda a tratar a causa, e eliminar a dor.\nDescobrir o ponto de equilíbrio é chegar mais perto de sua essência.\n
+\nEssência e equilíbrio.</string>
+    <string name="Contatos_Btn">Contatos</string>
+    <string name="Redes_Bold">Redes Sociais</string>
+
+    <!-- Strings Do Main -->
+    <string name="exercicios_Tab">Exercicios</string>
+    <string name="notificao_Tab">Notificação</string>
+    <string name="perfil_Tab">Perfil</string>
+    <string name="mais_Tab">Mais</string>
+
+    <!--Strings do Perfil -->
+    <string name="nome_PH">NOME</string>
+    <string name="id_PH">ID:123456789</string>
+    <string name="email_PH">Email:</string>
+    <string name="telefone_PH">Telefone:</string>
+    <string name="nascimento_PH">Nascimento:</string>
+    <string name="codigo_de_acesso_PH">Código de Acesso:</string>
+    <string name="foto_de_perfil_ImgD">Foto de Perfil</string>
+    <string name="botao_editar_ImgD">Botão Editar</string>
+    <string name="sair_Btn">Sair</string>
+
+    <!-- Strings Login -->
+    <string name="cpf_Hin">CPF</string>
+    <string name="codigo_de_acesso_Hin">Código de Acesso</string>
+    <string name="entrar_Btn">Entrar</string>
+    <string name="logo_alinha_ImgD">Logo Alinha +</string>
+    <string name="botao_linkedin_ImgD">Botão linkedin</string>
+    <string name="botao_instagram_ImgD">Botão Instagram</string>
+    <string name="botao_youtube_ImgD">Botão Youtube</string>
+    <string name="botao_website_ImgD">Botão Website</string>
+
+
 </resources>

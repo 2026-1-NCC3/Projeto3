@@ -10,10 +10,12 @@
         android:background="@color/backgroundSplash"
         android:gravity="center"
         >
+        <!-- Logo -->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/logo_e_texto"/>
+            android:background="@drawable/logo_e_texto"
+            android:contentDescription="@string/logo_alinha_ImgD"/>
 
 
 
