@@ -35,8 +35,12 @@ Aliquam porttitor accumsan augue quis venenatis. Nam nec porttitor orci. Morbi e
 ## <img src="https://img.icons8.com/?size=100&id=zfHRZ6i1Wg0U&format=png&color=000000" width="20" height="20"/> Protótipo navegável no Figma
 <a href="https://www.figma.com/design/V2nRTpQ0EYJirOb14HC2ln/Alinha--?node-id=1-3&t=PnWBeycB26CRRtlZ-1">Protótipo navegável</a>
 
-## <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFggf9yNRN9xCYku8XMEkSE0LU9uMhkYbehQ&s" width="20" height="20"/> Link para App
-<a href="https://projeto-interdisciplinar-webcrawlers.vercel.app/">Link para App</a>
+## <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFggf9yNRN9xCYku8XMEkSE0LU9uMhkYbehQ&s" width="20" height="20"/> Link para o Site
+<a href="https://alinha-mais.vercel.app">Link para App</a>
+
+# Login adm:
+<p>admin@exemplo.com</p>
+<p>123456</p>
 
 
 <a href="https://drive.google.com/file/d/1Q3j9Mctuf6AGw1u8kAA7rW3bMannkA4P/view?usp=drivesdk">ARQUIVO PI</a>
