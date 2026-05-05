@@ -19,7 +19,6 @@
        width="300">
 </p>
 
-## INFORMAÇÃO IMPORTANTE: Para melhor visualização das entregas é recomendado realizar o download dos arquivos, devido possíveis erros no Front do GitHub!
 
 <p>
 Projeto Interdisciplinar: Ecossistema Digital Clínica Maya (RPG)
