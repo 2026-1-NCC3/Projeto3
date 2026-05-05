@@ -51,9 +51,13 @@ Na primeira etapa do projeto, estabelecemos a base lógica do sistema através d
 ├── Imagens
 │
 ├── src
-|   ├── Backend
-|   └── Frontend
-|
+│   ├── Entrega 1
+│   │   ├── Backend
+│   │   └── Frontend
+│   └── Entrega 2
+│       ├── Backend
+│       └── Frontend
+│
 ├── Documentos
 │   ├── Entrega 1
 │   │   ├── Entrega Análise Descritiva de Dados
@@ -149,4 +153,9 @@ O painel web estará disponível em `http://localhost:3000`.
 
 Aqui estão as referências usadas no projeto.
 
-1. <a href="https://liderancasempaticas.com/">Referência 1</a>
+1. <a href="https://nodejs.org/en/docs">Node.js</a>
+2. <a href="https://react.dev">React</a>
+3. <a href="https://developer.android.com/studio/intro?hl=pt-br">Android Studio</a>
+4. <a href="https://sqlitecloud.io/docs">SQLite Cloud</a>
+5. <a href="https://render.com/docs">Render (deploy)</a>
+6. <a href="https://help.figma.com">Figma</a>
