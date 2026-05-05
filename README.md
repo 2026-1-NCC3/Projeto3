@@ -94,10 +94,52 @@ Não há instalação! Baixe o App por <a href="https://projeto-interdisciplinar
 
 ## 💻 Configuração para Desenvolvimento
 
-Para abrir este projeto você necessita das seguintes ferramentas:
+### 1. Clonar o repositório
 
--<a href="https://code.visualstudio.com/">ferramenta 1</a><br>
--<a href="https://nodejs.org/pt">ferramenta 2</a><br>
+```bash
+git clone https://github.com/2026-1-NCC3/Projeto3
+cd Projeto3
+```
+
+---
+
+### 2. Backend (API)
+
+```bash
+cd src/Backend
+npm install
+```
+
+> Crie um arquivo `.env` na pasta `back` com as variáveis de ambiente necessárias.
+
+```bash
+npm run dev
+```
+
+A API estará disponível em `http://localhost:3000` (ou a porta definida no `.env`).
+
+---
+
+### 3. Frontend Web
+
+```bash
+cd src/Frontend/Web
+npm install
+npm start
+```
+
+O painel web estará disponível em `http://localhost:3000`.
+
+---
+
+### 4. Aplicativo Mobile (Android)
+
+1. Abra o **Android Studio**
+2. Selecione **Open** e navegue até a pasta `src/Frontend/App`
+3. Aguarde a sincronização do Gradle
+4. Conecte um dispositivo Android ou inicie um emulador
+5. Clique em **Run ▶**
+
 
 
 
