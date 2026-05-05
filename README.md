@@ -21,8 +21,6 @@
 
 
 <p>
-Projeto Interdisciplinar: Ecossistema Digital Clínica Maya (RPG)
-
 Visão Geral do Projeto<br>
 O projeto visa modernizar a gestão e o atendimento da fisioterapeuta Maya Yoshiko Yamamoto, especialista em Reeducação Postural Global (RPG). Atualmente, a falta de padronização nos registros dificulta a rastreabilidade dos prontuários e o engajamento dos pacientes. Nossa solução propõe um ecossistema digital composto por um Módulo Web administrativo, um Aplicativo Mobile para pacientes e um Backend robusto.
 
