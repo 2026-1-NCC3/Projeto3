@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ContatosFragment"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingHorizontal="20dp">
+
+    <ImageButton
+        android:id="@+id/btnVoltar"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:background="@drawable/voltar"
+        android:backgroundTint="@color/primariaEE"
+        android:layout_gravity="end"
+        />
+
+    <TextView
+        style="@style/TextBold"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contatos_Bold"
+        android:gravity="center"/>
+
+   <androidx.cardview.widget.CardView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:cardCornerRadius="20dp"
+       >
+
+       <TextView
+           style="@style/TextRegular"
+           android:padding="20dp"
+           android:background="@color/boxBg"
+
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="@string/texto_contatos" />
+
+   </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/emailBtn"
+        style="@style/ButtonColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="40dp"
+        android:text="@string/emailBtn"
+        android:backgroundTint="@color/primariaEE"
+        />
+
+    <Button
+        android:id="@+id/whatsappBtn"
+        style="@style/ButtonColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="40dp"
+        android:text="@string/whatsappBtn"
+        android:backgroundTint="@color/primariaEE"
+        />
+</LinearLayout>

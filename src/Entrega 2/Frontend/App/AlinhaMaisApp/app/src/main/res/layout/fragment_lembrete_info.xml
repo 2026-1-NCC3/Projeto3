@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="10dp"
+        tools:context=".LembreteInfoFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/btnVoltar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/voltar"
+                android:backgroundTint="@color/primariaEE"
+                android:layout_gravity="end"/>
+
+            <!-- Imagem do lembrete -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shapeAppearanceOverlay="@drawable/custom_round_square_solid"
+                android:backgroundTint="@color/boxBg"
+                android:id="@+id/imgLembrete"
+                android:maxHeight="200dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+
+            <!-- Titulo do Lembrete -->
+            <TextView
+                android:layout_margin="10dp"
+                android:id="@+id/tvTituloLembrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/titulo_PH"
+                style="@style/TextBold"/>
+
+            <!-- Descrição do Lembrete -->
+            <TextView
+                android:id="@+id/tvDescricaoLembrete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_round_square_solid"
+                android:paddingVertical="20sp"
+                android:paddingHorizontal="40dp"
+                android:backgroundTint="@color/boxBg"
+                android:text="@string/curto_Lorem"
+                style="@style/TextRegular"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="4"
+                android:layout_margin="10dp"
+                >
+                <!-- Layout do streak do dia-->
+                <LinearLayout
+                    android:id="@+id/streakCheck"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@drawable/custom_round_square_solid"
+                    android:backgroundTint="@color/boxBg"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_weight="3"
+                    >
+
+                    <ImageView
+                        android:id="@+id/fogo"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:maxWidth="70dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:background="@drawable/fogo_vazio"
+                        />
+
+                    <TextView
+                        android:id="@+id/streakNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textSize="50sp"
+                        android:textColor="@color/bw"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:id="@+id/streakTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Complete o exercicio e continue com sua Sequência!"
+                        android:textSize="12sp"/>
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/boxBg"
+
+                    android:background="@drawable/custom_round_square_solid"
+                    android:button="@drawable/custom_checkbox"
+                    />
+
+
+            </LinearLayout>
+
+            <!-- Layout do streak da semana-->
+            <LinearLayout
+                android:id="@+id/streakSemana"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_round_square_solid"
+                android:backgroundTint="@color/boxBg"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:orientation="horizontal"
+                android:weightSum="7"
+                >
+
+                <!-- Domingo -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_dom"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo"
+                        android:text="D" />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Dom" />
+
+                </LinearLayout>
+
+                <!-- Segunda -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_seg"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo" />                       android:text="S" />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Seg" />
+
+                </LinearLayout>
+
+                <!-- Terça -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_ter"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo"
+                        />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Ter" />
+
+                </LinearLayout>
+
+                <!-- Quarta -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_qua"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo" />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Qua" />
+
+                </LinearLayout>
+
+                <!-- Quinta -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_qui"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo"/>
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Qui" />
+
+                </LinearLayout>
+
+                <!-- Sexta -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_sex"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo" />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Sex" />
+
+                </LinearLayout>
+
+                <!-- Sabado -->
+                <LinearLayout style="@style/ColunaStreak">
+                    <ImageView
+                        android:id="@+id/tv_dia_sab"
+                        android:layout_height="36dp"
+                        android:layout_width="36dp"
+                        android:background="@drawable/circulo" />
+                    <TextView
+                        style="@style/DiaStreak"
+                        android:text="Sáb" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main"
+    android:orientation="vertical"
+    >
+
+        <!--Barra Superior -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_corners_bottom"
+            android:paddingTop="35dp"
+            android:backgroundTint="@color/fundoSolido"
+            app:tabRippleColor="#00000000"
+            app:tabIndicatorColor="@color/primariaClaro"
+            app:tabSelectedTextColor="@color/primariaClaro"
+            >
+            <!-- Tab exercicios -->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/exercicioButton"
+                android:icon="@drawable/exercicio"
+                android:text="Lembretes"
+                />
+
+            <!-- Tab Notificacao-->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/notificacaoTab"
+                android:icon="@drawable/com_notificacao"
+                android:text="@string/notificao_Tab"
+                />
+
+            <!-- Tab Perfil -->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/perfilTab"
+                android:icon="@drawable/perfil"
+                android:text="@string/perfil_Tab"
+                />
+
+            <!-- Tab Mais -->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/moreTab"
+                android:icon="@drawable/elipse"
+                android:text="@string/mais_Tab"
+                />
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+<!--Layout para exercicios -->
+    <FrameLayout
+        android:id="@+id/fragmentsFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/custom_corners_top"
+        android:backgroundTint="@color/bgTransparente">
+
+
+    </FrameLayout>
+
+</LinearLayout>

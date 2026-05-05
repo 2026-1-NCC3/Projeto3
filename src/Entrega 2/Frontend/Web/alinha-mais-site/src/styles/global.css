@@ -1,0 +1,233 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+:root {
+  --primaria: #2ab4c0;
+  --primaria-escuro: #1a8a94;
+  --secundaria: #e8735a;
+  --secundaria-escuro: #c45a42;
+  --fundo: #f0f4f8;
+  --branco: #ffffff;
+  --texto: #2d3748;
+  --texto-claro: #718096;
+  --borda: #e2e8f0;
+  --sucesso: #48bb78;
+  --erro: #fc8181;
+  --sombra: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(42, 180, 192, 0.12) 0%,
+    rgba(42, 180, 192, 0.05) 40%,
+    #ffffff 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.logo {
+  font-family: "RPG Maya Yamamoto", sans-serif;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--texto);
+  background: var(--branco);
+  outline: none;
+  transition: border 0.2s;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primaria);
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-claro);
+  margin-bottom: 6px;
+}
+
+.campo {
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--branco);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--sombra);
+}
+
+.btn-primario {
+  background: var(--primaria);
+  color: white;
+}
+
+.btn-secundario {
+  background: var(--secundaria);
+  color: white;
+}
+
+.btn-perigo {
+  background: var(--erro);
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--primaria);
+  border: 1px solid var(--primaria);
+}
+
+.badge-ativo {
+  background: #c6f6d5;
+  color: #276749;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-inativo {
+  background: #fed7d7;
+  color: #9b2c2c;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.erro-msg {
+  color: var(--erro);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.sucesso-msg {
+  color: var(--sucesso);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primaria), #0e5a73);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-header h1 {
+  font-size: 32px;
+  color: var(--primaria);
+}
+
+.login-header p {
+  color: var(--texto-claro);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.login-card input {
+  height: 42px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+}
+
+.login-card {
+  animation: fadeInScale 0.4s ease;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* container do input com ícone */
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  padding-right: 40px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--texto-claro);
+  display: flex;
+  align-items: center;
+}

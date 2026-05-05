@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="bg80">#44484848</color>
+    <color name="secundariaClaro">#086485</color>
+    <color name="secundariaEscuro">#3EBAD2</color>
+    <color name="cinzaMedio">#F0F0F0</color>
+    <color name="fundoSolido">#17171a</color>
+    <color name="primariaClaro">#D9422E</color>
+    <color name="primariaEscuro">#EE715F</color>
+    <color name="primariaEE">#D9422E</color>
+    <color name="primariaEEE">#B52323</color>
+    <color name="Texto">#FFFFFF</color>
+    <color name="trackTint">#D9422E</color>
+    <color name="Hint">#FFFFFF</color>
+    <color name="backgroundSplash">#131217</color>
+    <color name="bgTransparente">#44484848</color>
+    <color name="wb">#FF000000</color>
+    <color name="bw">#FFFFFFFF</color>
+    <color name="intervaloBg">#09090a</color>
+    <color name="intervaloTxt">#a0a0ad</color>
+    <color name="horarioTxt">#868691</color>
+    <color name="boxBg">#17171a</color>
+
+
+</resources>
