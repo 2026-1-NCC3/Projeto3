@@ -1,11 +1,10 @@
-<h1 align="center"> Projeto3 </h1>
 <h1 align="center">FECAP - Fundação de Comércio Álvares Penteado</h1>
 
 <p align="center">
 <a href= "https://www.fecap.br/"><img src="https://github.com/user-attachments/assets/aed2b4ff-9c3d-4cdf-83da-2aa277a53f82" alt="FECAP - Fundação de Comércio Álvares Penteado" border="0"></a>
 </p>
 
-<h1 align="center">Alinha+</h1>
+<h1>Alinha+</h1>
 
 ## Integrantes: <a href="https://github.com/rodriguesbrun">Bruno Rodrigues Da Costa</a>, <a href="https://www.linkedin.com/in/guilherme-monteiro14/">Guilherme Monteiro Da Silva</a>, <a href="https://github.com/DebatingAlpaca">João Pedro Da Silva</a>, <a href="https://github.com/StefanyO8">Stefany Samira De Oliveira Cubertino</a>
 
