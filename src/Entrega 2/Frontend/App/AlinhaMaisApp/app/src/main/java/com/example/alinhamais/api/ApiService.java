@@ -1,5 +1,6 @@
 package com.example.alinhamais.api;
 
+import com.example.alinhamais.models.AtualizarPerfilRequest;
 import com.example.alinhamais.models.LembreteResponse;
 import com.example.alinhamais.models.LoginRequest;
 import com.example.alinhamais.models.LoginResponse;
@@ -46,5 +47,12 @@ public interface ApiService {
 
     @PUT("notificacoes/paciente/{id}/lida-todas")
     Call<Void> marcarTodasComoLida(@Path("id") int id);
+
+    @PUT("pacientes/{id}")
+    Call<MensagemResponse> atualizarPerfil(
+            @Header("Authorization") String token,
+            @Path("id") int id,
+            @Body AtualizarPerfilRequest body
+    );
 
 }
