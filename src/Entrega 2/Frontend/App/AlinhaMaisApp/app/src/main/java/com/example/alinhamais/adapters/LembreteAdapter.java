@@ -147,4 +147,34 @@ public class LembreteAdapter extends
         lista.addAll(novaLista);
         notifyDataSetChanged();
     }
+
+    public void filtrarPorPeriodo(List<LembreteResponse> listaCompleta, int selectedOptionId) {
+        List<LembreteResponse> listaFiltrada = new java.util.ArrayList<>();
+
+        for (LembreteResponse l : listaCompleta) {
+            if (l.getHorarioInicio() == null) continue;
+
+            int horaInicio = Integer.parseInt(l.getHorarioInicio().split(":")[0]);
+            int horaFim = Integer.parseInt(l.getHorarioFim().split(":")[0]);
+
+            if (selectedOptionId == R.id.radioManha) {
+                if ((horaInicio >= 6 && horaInicio < 12) || (horaFim >= 6 && horaFim < 12)) listaFiltrada.add(l);
+
+            } else if (selectedOptionId == R.id.radioTarde) {
+                if ((horaInicio >= 12 && horaInicio < 18) || (horaFim >= 12 && horaFim < 18)) listaFiltrada.add(l);
+
+            } else if (selectedOptionId == R.id.radioNoite) {
+                if ((horaInicio >= 18 || horaInicio < 6) || (horaFim >= 18 || horaFim < 6)) listaFiltrada.add(l);
+
+            } else if (selectedOptionId == R.id.radioTodos) {
+                listaFiltrada.add(l);
+            }
+        }
+
+        lista.clear();
+        lista.addAll(listaFiltrada);
+        notifyDataSetChanged();
+    }
+
+
 }

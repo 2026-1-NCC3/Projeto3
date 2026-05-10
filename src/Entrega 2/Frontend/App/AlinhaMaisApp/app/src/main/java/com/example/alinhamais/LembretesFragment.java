@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -34,12 +35,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LembretesFragment extends Fragment implements LembreteAdapter.OnItemClickListener {
+public class LembretesFragment extends Fragment implements  FiltroDialogFragment.OnOptionSelectedListener, LembreteAdapter.OnItemClickListener {
 
     private RecyclerView recycler;
     private LembreteAdapter adapter;
+    private ImageButton btnFiltro;
     private String token;
     private int idPaciente;
+
+    private int filtroAtual;
+
+    private List<LembreteResponse> listaCompleta;
 
     private static final String BASE_URL =
             "https://projeto-interdisciplinar-3.onrender.com";
@@ -71,6 +77,18 @@ public class LembretesFragment extends Fragment implements LembreteAdapter.OnIte
         recycler = view.findViewById(R.id.recyclerLembretes);
         recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        btnFiltro = view.findViewById(R.id.btnFilto);
+        filtroAtual = -1;
+
+        listaCompleta = new java.util.ArrayList<>();
+
+        //abre o dialog de filtros
+        btnFiltro.setOnClickListener(v -> {
+            FiltroDialogFragment dialog = FiltroDialogFragment.newInstance(filtroAtual);
+            dialog.setOnOptionSelectedListener(LembretesFragment.this);
+            dialog.show(getChildFragmentManager(), "FiltroDialog");
+        });
+
         //carregar lembretes quando subir a tela (atualizar)
         SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.swipeRefresh);
 
@@ -78,6 +96,7 @@ public class LembretesFragment extends Fragment implements LembreteAdapter.OnIte
             carregarLembretes();
             swipeRefresh.setRefreshing(false);
         });
+
 
         pedirPermissaoNotificacao();
 
@@ -96,6 +115,7 @@ public class LembretesFragment extends Fragment implements LembreteAdapter.OnIte
 
         return view;
     }
+
 
 
     //quando clicar em um dos adapters abre o fragment de info dos lembretes
@@ -156,8 +176,13 @@ public class LembretesFragment extends Fragment implements LembreteAdapter.OnIte
 
                         Log.d("LEMBRETES", "Quantidade: " + lembretes.size());
 
-                        adapter.atualizarLista(lembretes);
 
+                        listaCompleta = lembretes;
+                        if (filtroAtual != -1) {
+                            adapter.filtrarPorPeriodo(listaCompleta, filtroAtual);
+                        } else {
+                            adapter.atualizarLista(lembretes);
+                        }
 
                         LembreteNotificationManager.cancelarTodos(requireContext(), lembretes);
 
@@ -214,5 +239,11 @@ public class LembretesFragment extends Fragment implements LembreteAdapter.OnIte
                 });
     }
 
+
+    @Override
+    public void onOptionSelected(int selectedOptionId) {
+        filtroAtual = selectedOptionId;
+        adapter.filtrarPorPeriodo(listaCompleta, selectedOptionId);
+    }
 
 }
