@@ -107,7 +107,7 @@ cd Projeto3
 ### 2. Backend (API)
 
 ```bash
-cd src/Backend
+cd src/Entrega 2/Backend
 npm install
 ```
 
@@ -124,7 +124,7 @@ A API estará disponível em `http://localhost:3000` (ou a porta definida no `.e
 ### 3. Frontend Web
 
 ```bash
-cd src/Frontend/Web
+cd src/Entrega 2/Frontend/Web
 npm install
 npm start
 ```
@@ -136,7 +136,7 @@ O painel web estará disponível em `http://localhost:3000`.
 ### 4. Aplicativo Mobile (Android)
 
 1. Abra o **Android Studio**
-2. Selecione **Open** e navegue até a pasta `src/Frontend/App`
+2. Selecione **Open** e navegue até a pasta `src/Entrega 2/Frontend/App`
 3. Aguarde a sincronização do Gradle
 4. Conecte um dispositivo Android ou inicie um emulador
 5. Clique em **Run ▶**
