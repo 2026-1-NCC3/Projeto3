@@ -145,7 +145,7 @@ O painel web estará disponível em `http://localhost:3000`.
 
 
 ## 📋 Licença/License
-<a href="https://github.com/2026-1-NCC3/Projeto3">Alinha+</a> © 2026 by <a href="https://github.com/2026-1-NCC3">Bruno Rodrigues Da Costa, Guilherme Monteiro Da Silva, João Pedro Da Silva,Stefany Samira De Oliveira Cubertino</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>
+<a href="https://github.com/2026-1-NCC3/Projeto3">Alinha+</a> © 2026 by <a href="https://github.com/2026-1-NCC3">FECAP, Bruno Rodrigues Da Costa, Guilherme Monteiro Da Silva, João Pedro Da Silva, Stefany Samira De Oliveira Cubertino</a> is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>
 
 <p align="center"><br/><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"></p>
 
