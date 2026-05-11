@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -27,19 +27,29 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/voltar"
-                android:backgroundTint="@color/primariaEE"
-                android:layout_gravity="end"/>
+                android:layout_gravity="end"
+                android:contentDescription="@string/voltar_ImgD" />
 
             <!-- Imagem do lembrete -->
-            <com.google.android.material.imageview.ShapeableImageView
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:shapeAppearanceOverlay="@drawable/custom_round_square_solid"
+                android:layout_marginHorizontal="10dp"
                 android:backgroundTint="@color/boxBg"
-                android:id="@+id/imgLembrete"
-                android:maxHeight="200dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
+                app:cardCornerRadius="30dp">
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:shapeAppearanceOverlay="@drawable/custom_round_square_solid"
+                    android:backgroundTint="@color/boxBg"
+                    android:id="@+id/imgLembrete"
+                    android:maxHeight="200dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
+
+            </androidx.cardview.widget.CardView>
+
 
 
             <!-- Titulo do Lembrete -->
@@ -49,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/titulo_PH"
+                android:textColor="@color/bw"
                 style="@style/TextBold"/>
 
             <!-- Descrição do Lembrete -->
@@ -90,6 +101,7 @@
                         android:id="@+id/fogo"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:contentDescription="@string/fogo_ImgD"
                         android:maxWidth="70dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
@@ -100,7 +112,7 @@
                         android:id="@+id/streakNum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
+                        android:text="@string/streakN_PH"
                         android:textSize="50sp"
                         android:textColor="@color/bw"
                         android:layout_marginEnd="10dp"/>
@@ -109,7 +121,7 @@
                         android:id="@+id/streakTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Complete o exercicio e continue com sua Sequência!"
+                        android:text="@string/StreakTxt_PH"
                         android:textSize="12sp"/>
 
 
@@ -164,7 +176,7 @@
                         android:id="@+id/tv_dia_seg"
                         android:layout_height="36dp"
                         android:layout_width="36dp"
-                        android:background="@drawable/circulo" />                       android:text="S" />
+                        android:background="@drawable/circulo" />
                     <TextView
                         style="@style/DiaStreak"
                         android:text="Seg" />

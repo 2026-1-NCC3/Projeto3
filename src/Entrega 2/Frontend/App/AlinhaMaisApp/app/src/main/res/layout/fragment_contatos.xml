@@ -14,9 +14,8 @@
         android:layout_height="50dp"
         android:layout_width="50dp"
         android:background="@drawable/voltar"
-        android:backgroundTint="@color/primariaEE"
         android:layout_gravity="end"
-        />
+        android:contentDescription="@string/voltar_ImgD" />
 
     <TextView
         style="@style/TextBold"

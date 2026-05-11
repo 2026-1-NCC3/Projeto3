@@ -14,7 +14,7 @@
         android:id="@+id/btnMarcarTodas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Marcar todas"
+        android:text="@string/marcar_Btn"
         android:textColor="@color/wb"
         android:layout_margin="12dp"
         app:layout_constraintTop_toTopOf="parent"

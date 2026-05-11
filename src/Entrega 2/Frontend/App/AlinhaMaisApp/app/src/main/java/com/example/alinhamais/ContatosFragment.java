@@ -70,7 +70,7 @@ public class ContatosFragment extends Fragment {
 
     private void sendEmail() {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:stefanysoliveirac@gmail.com")); // Only email apps should handle this
+        intent.setData(Uri.parse("mailto:alinhamais.3@gmail.com"));
         intent.putExtra(Intent.EXTRA_SUBJECT, "Dúvida sobre o App");
         intent.putExtra(Intent.EXTRA_TEXT, "Olá, vim pelo aplicativo Alinha+, gostaria de falar sobre...");
 

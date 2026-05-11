@@ -25,7 +25,7 @@
                 style="@style/TextBold"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Visualizar: " />
+                android:text="@string/visualizar_bold" />
 
             <RadioGroup
                 android:id="@+id/radioGroup"
@@ -38,26 +38,26 @@
                     android:id="@+id/radioTodos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Todos os lembretes"
+                    android:text="@string/texto_todos_os_lembretes"
                     />
 
                 <RadioButton
                     android:id="@+id/radioManha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lembretes da manhã (6:00 - 12:00)"/>
+                    android:text="@string/manha_Opc"/>
 
                 <RadioButton
                     android:id="@+id/radioTarde"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lembretes da tarde (12:00 - 18:00)"/>
+                    android:text="@string/tarde_Opc"/>
 
                 <RadioButton
                     android:id="@+id/radioNoite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lembretes da noite (18:00 - 6:00)"  />
+                    android:text="@string/noite_Opc"  />
 
             </RadioGroup>
 
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/primariaClaro"
-                android:text="Apply"
+                android:text="@string/apply_Btn"
                 android:textColor="@color/white"/>
 
         </LinearLayout>
