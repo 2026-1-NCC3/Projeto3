@@ -1,0 +1,6 @@
+CPF: 34545435
+
+ID LOGIN: 119776
+
+
+O lugar que hospedamos o banco de dados é meio ruim (sqliteCloud), ele desativa o projeto automaticamente quando está inativo, e preciso ligar manualmente de novo. Tentarei deixar ele ativo o máximo que eu conseguir :)
