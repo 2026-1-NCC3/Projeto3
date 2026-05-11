@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.example.alinhamais.models.LembreteResponse;
 import com.example.alinhamais.models.StreakViewModel;
+import com.example.alinhamais.utils.LembreteUtils;
 
 public class LembreteInfoFragment extends Fragment {
 
@@ -83,7 +84,10 @@ public class LembreteInfoFragment extends Fragment {
                     .placeholder(R.drawable.usuario_placeholder)
                     .into(imgLembrete);
         } else {
-            imgLembrete.setImageResource(R.drawable.sem_notificacao);
+            imgLembrete.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imgLembrete.setImageResource(
+                    LembreteUtils.getImagemPorHorario(lembrete.getHorarioInicio(), lembrete.getHorarioFim())
+            );
         }
 
         //atualiza quando rola pra cima

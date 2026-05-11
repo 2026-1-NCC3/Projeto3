@@ -18,6 +18,7 @@ import com.example.alinhamais.LembreteInfoFragment;
 import com.example.alinhamais.LembretesFragment;
 import com.example.alinhamais.R;
 import com.example.alinhamais.models.LembreteResponse;
+import com.example.alinhamais.utils.LembreteUtils;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.List;
@@ -95,14 +96,18 @@ public class LembreteAdapter extends
 
         // Foto
         if (l.getFoto() != null && !l.getFoto().isEmpty()) {
+            holder.imgLembrete.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(context)
                     .load(baseUrl + l.getFoto())
                     .centerCrop()
                     .placeholder(R.drawable.usuario_placeholder)
                     .into(holder.imgLembrete);
-        } else {
-            holder.imgLembrete.setImageResource(R.drawable.sem_notificacao);
-        }
+        }  else {
+        holder.imgLembrete.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.imgLembrete.setImageResource(
+                    LembreteUtils.getImagemPorHorario(l.getHorarioInicio(), l.getHorarioFim())
+            );
+    }
 
         // Switch — desativa listener antes de setar o valor
         holder.switchLembrete.setOnCheckedChangeListener(null);
@@ -161,7 +166,7 @@ public class LembreteAdapter extends
                 if ((horaInicio >= 6 && horaInicio < 12) || (horaFim >= 6 && horaFim < 12)) listaFiltrada.add(l);
 
             } else if (selectedOptionId == R.id.radioTarde) {
-                if ((horaInicio >= 12 && horaInicio < 18) || (horaFim >= 12 && horaFim < 18)) listaFiltrada.add(l);
+                if ((horaInicio >= 12 && horaInicio < 18) || (horaFim >= 12 && horaFim < 18) || (horaInicio <18 && (horaFim > 12 || horaFim < 6))) listaFiltrada.add(l);
 
             } else if (selectedOptionId == R.id.radioNoite) {
                 if ((horaInicio >= 18 || horaInicio < 6) || (horaFim >= 18 || horaFim < 6)) listaFiltrada.add(l);
@@ -175,6 +180,8 @@ public class LembreteAdapter extends
         lista.addAll(listaFiltrada);
         notifyDataSetChanged();
     }
+
+
 
 
 }
