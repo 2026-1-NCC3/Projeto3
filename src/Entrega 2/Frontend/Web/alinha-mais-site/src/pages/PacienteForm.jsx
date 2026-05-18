@@ -101,18 +101,18 @@ function ModalCodigoAcesso({ idLogin, nome, onFechar }) {
   );
 }
 
-function mascaraTelefone(e, setForm, form){
-  let digitos = e.target.value.replace(/\D/g, "").slice(0,11);
+function mascaraTelefone(e, setForm, form) {
+  let digitos = e.target.value.replace(/\D/g, "").slice(0, 11);
 
   let mascarado = digitos;
-  if (digitos.length > 6){
+  if (digitos.length > 6) {
     mascarado = `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
   } else if (digitos.length > 2) {
-     mascarado = `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+    mascarado = `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
   } else if (digitos.length > 0) {
     mascarado = `(${digitos})`;
   }
-  setForm({...form, telefone: mascarado});
+  setForm({ ...form, telefone: mascarado });
 }
 
 function mascaraCPF(e, setForm, form) {
@@ -134,24 +134,20 @@ export function validarCPF(cpf) {
   const digitos = cpf.replace(/\D/g, "");
 
   if (digitos.length !== 11) return false;
-  // não aceita sequências repetidas como 111.111.111-11
   if (/^(\d)\1{10}$/.test(digitos)) return false;
 
-  // valida o 1 dígito 
   let soma = 0;
   for (let i = 0; i < 9; i++) soma += parseInt(digitos[i]) * (10 - i);
   let resto = (soma * 10) % 11;
   if (resto === 10 || resto === 11) resto = 0;
   if (resto !== parseInt(digitos[9])) return false;
 
-  // valida 2 dígito 
   soma = 0;
   for (let i = 0; i < 10; i++) soma += parseInt(digitos[i]) * (11 - i);
   resto = (soma * 10) % 11;
   if (resto === 10 || resto === 11) resto = 0;
   return resto === parseInt(digitos[10]);
 }
-
 
 export default function PacienteForm() {
   const { id } = useParams();
@@ -206,20 +202,25 @@ export default function PacienteForm() {
     e.preventDefault();
     setErro("");
 
-    if (!validarCPF(form.cpf)){
+    if (!validarCPF(form.cpf)) {
       setErro("CPF inválido. Verifique os dígitos e tente novamente.");
       return;
     }
-    
+
     setCarregando(true);
+
+    // Remove pontuação do CPF antes de enviar ao banco
+    const dadosParaEnviar = {
+      ...form,
+      cpf: form.cpf.replace(/\D/g, ""),
+    };
 
     try {
       if (editando) {
-        await api.put(`/pacientes/${id}`, form);
+        await api.put(`/pacientes/${id}`, dadosParaEnviar);
         navigate("/pacientes");
       } else {
-        const res = await api.post("/pacientes", form);
-        // Abre o modal com o código gerado
+        const res = await api.post("/pacientes", dadosParaEnviar);
         setModal({
           visivel: true,
           idLogin: res.data.id_login,
@@ -239,7 +240,6 @@ export default function PacienteForm() {
 
   return (
     <div style={{ maxWidth: "640px" }}>
-      {/* Modal de código de acesso */}
       {modal.visivel && (
         <ModalCodigoAcesso
           idLogin={modal.idLogin}
