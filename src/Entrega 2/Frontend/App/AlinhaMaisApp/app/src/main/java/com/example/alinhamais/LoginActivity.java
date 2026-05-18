@@ -3,6 +3,8 @@ package com.example.alinhamais;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,14 +30,54 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        cpfEdit      = findViewById(R.id.cpfEdit);
-        idLoginEdit  = findViewById(R.id.idLoginEdit);
-        loginButton  = findViewById(R.id.loginButton);
+        cpfEdit     = findViewById(R.id.cpfEdit);
+        idLoginEdit = findViewById(R.id.idLoginEdit);
+        loginButton = findViewById(R.id.loginButton);
+
+        cpfEdit.addTextChangedListener(mascaraCPF());
 
         loginButton.setOnClickListener(v -> fazerLogin());
     }
 
+    // TextWatcher que aplica a máscara 000.000.000-00 enquanto o usuário digita
+    private TextWatcher mascaraCPF() {
+        return new TextWatcher() {
+            boolean editando = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (editando) return;
+                editando = true;
+
+                String digitos = s.toString().replaceAll("\\D", "");
+
+                if (digitos.length() > 11) {
+                    digitos = digitos.substring(0, 11);
+                }
+
+                StringBuilder formatado = new StringBuilder();
+                for (int i = 0; i < digitos.length(); i++) {
+                    if (i == 3 || i == 6) formatado.append(".");
+                    if (i == 9)           formatado.append("-");
+                    formatado.append(digitos.charAt(i));
+                }
+
+                cpfEdit.setText(formatado.toString());
+                cpfEdit.setSelection(formatado.length());
+
+                editando = false;
+            }
+        };
+    }
+
     private void fazerLogin() {
+        // Envia o CPF formatado (000.000.000-00), como está salvo no banco
         String cpf      = cpfEdit.getText().toString().trim();
         String id_login = idLoginEdit.getText().toString().trim();
 

@@ -47,7 +47,7 @@
                 android:background="@drawable/custom_round_square"
                 android:drawableStart="@drawable/pessoa"
                 android:hint="@string/cpf_Hin"
-                android:inputType="number"
+                android:inputType="phone"
                 android:maxLines="1"
                 android:imeOptions="actionNext"/>
 
